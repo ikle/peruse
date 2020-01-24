@@ -122,3 +122,12 @@ size_t nfa_proc_match (struct nfa_proc *o, const char *s)
 
 	return o->match;
 }
+
+/*
+ * To Do:
+ *
+ * 1. Stop on empty next set.
+ * 2. Distinguish match with empty string from no match state.
+ * 3. Move match function into test sample.
+ *
+ */
