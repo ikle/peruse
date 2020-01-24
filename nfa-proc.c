@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+#include <limits.h>
 #include <stdlib.h>
 
 #include "bitset.h"
@@ -14,7 +15,7 @@
 
 struct nfa_proc {
 	const struct nfa_state *start;
-	size_t i, match;
+	int i, match;
 
 	size_t count;
 	const struct nfa_state **map;
@@ -82,17 +83,21 @@ static void add_state (struct nfa_proc *o, long *set, const struct nfa_state *s)
 
 void nfa_proc_start (struct nfa_proc *o)
 {
-	o->match = o->i = 0;
+	o->i = 0;
+	o->match = -1;
 
 	bitset_clear (o->cset, o->count);
 	add_state (o, o->cset, o->start);
 }
 
-void nfa_proc_step (struct nfa_proc *o, unsigned c)
+int nfa_proc_step (struct nfa_proc *o, unsigned c)
 {
 	size_t i;
 	const struct nfa_state *s;
 	long *t;
+
+	if (o->i == INT_MAX)
+		return 0;
 
 	bitset_clear (o->nset, o->count);
 
@@ -109,16 +114,16 @@ void nfa_proc_step (struct nfa_proc *o, unsigned c)
 
 	++o->i;
 	t = o->cset; o->cset = o->nset; o->nset = t;  /* swap sets */
+	return 1;
 }
 
-size_t nfa_proc_match (struct nfa_proc *o, const char *s)
+int nfa_proc_match (struct nfa_proc *o, const char *s)
 {
 	const char *p;
 
 	nfa_proc_start (o);
 
-	for (p = s; *p != '\0'; ++p)
-		nfa_proc_step (o, *p);
+	for (p = s; *p != '\0' && nfa_proc_step (o, *p); ++p) {}
 
 	return o->match;
 }
@@ -127,7 +132,6 @@ size_t nfa_proc_match (struct nfa_proc *o, const char *s)
  * To Do:
  *
  * 1. Stop on empty next set.
- * 2. Distinguish match with empty string from no match state.
  * 3. Move match function into test sample.
  *
  */
