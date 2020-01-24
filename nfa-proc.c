@@ -96,7 +96,7 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 	const struct nfa_state *s;
 	long *t;
 
-	if (o->i == INT_MAX)
+	if (o->i == INT_MAX || bitset_is_empty (o->cset, o->count))
 		return 0;
 
 	bitset_clear (o->nset, o->count);
@@ -131,7 +131,6 @@ int nfa_proc_match (struct nfa_proc *o, const char *s)
 /*
  * To Do:
  *
- * 1. Stop on empty next set.
  * 3. Move match function into test sample.
  *
  */

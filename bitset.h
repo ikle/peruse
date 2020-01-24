@@ -18,6 +18,8 @@ void bitset_clear (long *o, size_t limit);
 void bitset_add (long *o, size_t x);
 
 int bitset_is_member (const long *o, size_t x);
+int bitset_is_empty  (const long *o, size_t limit);
+
 size_t bitset_find (const long *o, size_t from, size_t limit);
 
 #endif  /* BITSET_H */

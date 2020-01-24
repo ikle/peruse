@@ -54,6 +54,17 @@ int bitset_is_member (const long *o, size_t x)
 	return (o[pos] & (1L << bit)) != 0;
 }
 
+int bitset_is_empty (const long *o, size_t limit)
+{
+	size_t i, count = bitset_get_size (limit);
+
+	for (i = 0; i < count; ++i)
+		if (o[i] != 0)
+			return 0;
+
+	return 1;
+}
+
 size_t bitset_find (const long *o, size_t from, size_t limit)
 {
 	size_t x;
