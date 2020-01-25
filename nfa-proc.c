@@ -118,23 +118,3 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 	t = o->cset; o->cset = o->nset; o->nset = t;  /* swap sets */
 	return match;
 }
-
-int nfa_proc_match (struct nfa_proc *o, const char *s)
-{
-	const char *p;
-	int state = nfa_proc_start (o);
-
-	for (p = s; *p != '\0'; ++p)
-		if ((state = nfa_proc_step (o, *p)) < 0)
-			return 0;
-
-	/* test for full string match */
-	return state > 0;
-}
-
-/*
- * To Do:
- *
- * 3. Move match function into test sample.
- *
- */

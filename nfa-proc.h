@@ -26,6 +26,4 @@ int nfa_proc_start (struct nfa_proc *o);
  */
 int nfa_proc_step  (struct nfa_proc *o, unsigned c);
 
-int nfa_proc_match (struct nfa_proc *o, const char *s);
-
 #endif  /* NFA_PROC_H */

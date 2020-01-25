@@ -12,6 +12,17 @@
 #include "nfa-proc.h"
 #include "re-parser.h"
 
+static int nfa_proc_match (struct nfa_proc *o, const char *s)
+{
+	int state = nfa_proc_start (o);
+
+	for (; *s != '\0'; ++s)
+		if ((state = nfa_proc_step (o, *s)) < 0)
+			return 0;
+
+	return state > 0;
+}
+
 int main (int argc, char *argv[])
 {
 	int i;
