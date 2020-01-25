@@ -16,8 +16,8 @@
 struct nfa_proc *nfa_proc_alloc (const struct nfa_state *nfa);
 void nfa_proc_free (struct nfa_proc *o);
 
-void nfa_proc_start (struct nfa_proc *o);
-int  nfa_proc_step  (struct nfa_proc *o, unsigned c);
+int nfa_proc_start (struct nfa_proc *o);
+int nfa_proc_step  (struct nfa_proc *o, unsigned c);
 
 int nfa_proc_match (struct nfa_proc *o, const char *s);
 

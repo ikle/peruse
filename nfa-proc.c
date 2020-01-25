@@ -15,8 +15,6 @@
 
 struct nfa_proc {
 	const struct nfa_state *start;
-	int i, match;
-
 	size_t count;
 	const struct nfa_state **map;
 	long *cset, *nset;
@@ -64,40 +62,39 @@ void nfa_proc_free (struct nfa_proc *o)
 	free (o);
 }
 
-static void add_state (struct nfa_proc *o, long *set, const struct nfa_state *s)
+/* returns non-zero if stop state added */
+static int add_state (struct nfa_proc *o, long *set, const struct nfa_state *s)
 {
 	if (s == NULL)
-		o->match = o->i + 1;  /* point to end */
+		return 1;
 
-	if (s == NULL || bitset_is_member (set, s->id))
-		return;
+	if (bitset_is_member (set, s->id))
+		return 0;
 
-	if (s->c == NFA_SPLIT) {
-		add_state (o, set, s->out[0]);
-		add_state (o, set, s->out[1]);
-		return;
-	}
+	if (s->c == NFA_SPLIT)
+		return add_state (o, set, s->out[0]) |
+		       add_state (o, set, s->out[1]);
 
 	bitset_add (set, s->id);
+	return 0;
 }
 
-void nfa_proc_start (struct nfa_proc *o)
+int nfa_proc_start (struct nfa_proc *o)
 {
-	o->i = 0;
-	o->match = -1;
-
 	bitset_clear (o->cset, o->count);
-	add_state (o, o->cset, o->start);
+
+	return add_state (o, o->cset, o->start);
 }
 
 int nfa_proc_step (struct nfa_proc *o, unsigned c)
 {
 	size_t i;
 	const struct nfa_state *s;
+	int match = 0;
 	long *t;
 
-	if (o->i == INT_MAX || bitset_is_empty (o->cset, o->count))
-		return 0;
+	if (bitset_is_empty (o->cset, o->count))
+		return -1;
 
 	bitset_clear (o->nset, o->count);
 
@@ -109,24 +106,24 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 		s = o->map[i];
 
 		if (s->c == c)
-			add_state (o, o->nset, s->out[0]);
+			match |= add_state (o, o->nset, s->out[0]);
 	}
 
-	++o->i;
 	t = o->cset; o->cset = o->nset; o->nset = t;  /* swap sets */
-	return 1;
+	return match;
 }
 
 int nfa_proc_match (struct nfa_proc *o, const char *s)
 {
 	const char *p;
+	int state = nfa_proc_start (o);
 
-	nfa_proc_start (o);
-
-	for (p = s; *p != '\0' && nfa_proc_step (o, *p); ++p) {}
+	for (p = s; *p != '\0'; ++p)
+		if ((state = nfa_proc_step (o, *p)) < 0)
+			return 0;
 
 	/* test for full string match */
-	return o->match >= 0 && s[o->match] == '\0';
+	return state > 0 && *p == '\0';
 }
 
 /*
