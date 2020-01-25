@@ -79,6 +79,9 @@ static int add_state (struct nfa_proc *o, long *set, const struct nfa_state *s)
 	return 0;
 }
 
+/*
+ * returns 1 on match (stop state reached), zero otherwise
+ */
 int nfa_proc_start (struct nfa_proc *o)
 {
 	bitset_clear (o->cset, o->count);
@@ -86,6 +89,9 @@ int nfa_proc_start (struct nfa_proc *o)
 	return add_state (o, o->cset, o->start);
 }
 
+/*
+ * returns -1 on error (no match), 1 on match, zero otherwise
+ */
 int nfa_proc_step (struct nfa_proc *o, unsigned c)
 {
 	size_t i;
