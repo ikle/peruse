@@ -123,7 +123,7 @@ int nfa_proc_match (struct nfa_proc *o, const char *s)
 			return 0;
 
 	/* test for full string match */
-	return state > 0 && *p == '\0';
+	return state > 0;
 }
 
 /*
