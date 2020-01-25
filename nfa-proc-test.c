@@ -17,7 +17,6 @@ int main (int argc, char *argv[])
 	int i;
 	struct nfa_state *nfa;
 	struct nfa_proc *proc;
-	int len;
 
 	if (argc < 3) {
 		fprintf (stderr, "usage:\n\tnfa-test RE string...\n");
@@ -34,13 +33,9 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	for (i = 2; i < argc; ++i) {
-		len = nfa_proc_match (proc, argv[i]);
-
-		/* test for full string match */
-		if (len >= 0 && argv[i][len] == '\0')
+	for (i = 2; i < argc; ++i)
+		if (nfa_proc_match (proc, argv[i]))
 			printf ("%s\n", argv[i]);
-	}
 
 	nfa_proc_free (proc);
 	nfa_state_free (nfa);

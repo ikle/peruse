@@ -125,7 +125,8 @@ int nfa_proc_match (struct nfa_proc *o, const char *s)
 
 	for (p = s; *p != '\0' && nfa_proc_step (o, *p); ++p) {}
 
-	return o->match;
+	/* test for full string match */
+	return o->match >= 0 && s[o->match] == '\0';
 }
 
 /*
