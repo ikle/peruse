@@ -93,8 +93,5 @@ start:
 		goto start;
 	}
 
-	if (o->token.id == 0)
-		return NULL;
-
-	return &o->token;
+	return o->token.id == 0 ? NULL : &o->token;
 }
