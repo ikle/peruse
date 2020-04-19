@@ -66,7 +66,7 @@ int nfa_lexer_eof (struct nfa_lexer *o)
 const struct nfa_token *nfa_lexer (struct nfa_lexer *o)
 {
 	size_t i;
-	int c, token;
+	int c, color;
 
 	input_eat (o->in, o->token.len);
 start:
@@ -76,11 +76,11 @@ start:
 	for (i = 0; i < o->in->avail;) {
 		c = o->in->cursor[i++];
 
-		if ((token = nfa_proc_step (o->proc, c)) < 0)
+		if ((color = nfa_proc_step (o->proc, c)) < 0)
 			return &o->token;
 
-		if (token > 0) {
-			o->token.id = token;
+		if (color > 0) {
+			o->token.id = color;
 			o->token.text = (void *) o->in->cursor;
 			o->token.len = i;
 		}
