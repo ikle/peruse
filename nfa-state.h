@@ -18,6 +18,7 @@ enum nfa_type {
 struct nfa_state {
 	struct nfa_state *next;
 	short c;
+	short color;	/* used by lexer to distinguish rules, 1 by default */
 	int index;	/* used by processor to map state to state index */
 	struct nfa_state *out[2];
 };
@@ -34,5 +35,7 @@ void nfa_state_free (struct nfa_state *o);
 /* set up indexes for NFA state list */
 void nfa_state_order (struct nfa_state *o);
 size_t nfa_state_count (const struct nfa_state *o);
+
+void nfa_state_color (struct nfa_state *o, int color);
 
 #endif  /* NFA_STATE_H */

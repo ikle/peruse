@@ -19,6 +19,7 @@ nfa_state (int c, struct nfa_state *a, struct nfa_state *b)
 
 	s->next = NULL;
 	s->c = c;
+	s->color = 1;
 	s->index = 0;
 
 	s->out[0] = a;
@@ -53,6 +54,12 @@ size_t nfa_state_count (const struct nfa_state *o)
 		++count;
 
 	return count;
+}
+
+void nfa_state_color (struct nfa_state *o, int color)
+{
+	for (; o != NULL; o = o->next)
+		o->color = color;
 }
 
 /* NFA leaf node constructors */
