@@ -13,7 +13,7 @@
 #include "nfa-lexer.h"
 
 struct nfa_lexer {
-	const struct nfa_rule *start, *stop;
+	const struct nfa_rule *start;
 	long *set;
 
 	struct nfa_token token;
@@ -33,8 +33,6 @@ struct nfa_lexer *nfa_lexer_alloc (const struct nfa_rule *start)
 	o->start = start;
 
 	for (p = o->start, i = 0; p != NULL; p = p->next, ++i) {}
-
-	o->stop = NULL;
 
 	if ((o->set = bitset_alloc (i)) == NULL)
 		goto no_set;
@@ -64,13 +62,9 @@ static int nfa_lexer_start (struct nfa_lexer *o)
 	size_t i;
 	int token = 0;
 
-	o->stop = NULL;
-
-	for (p = o->start, i = 0; p != o->stop; p = p->next, ++i)
-		if (nfa_proc_start (p->proc) && token == 0) {
-			o->stop = p->next;
+	for (p = o->start, i = 0; p != NULL; p = p->next, ++i)
+		if (nfa_proc_start (p->proc) && token == 0)
 			token = p->token;
-		}
 
 	bitset_clear (o->set, i);
 	return token;
@@ -82,7 +76,7 @@ static int nfa_lexer_step (struct nfa_lexer *o, unsigned c)
 	size_t i;
 	int token = -1, state;
 
-	for (p = o->start, i = 0; p != o->stop; p = p->next, ++i) {
+	for (p = o->start, i = 0; p != NULL; p = p->next, ++i) {
 		if (bitset_is_member (o->set, i))
 			continue;
 
@@ -92,8 +86,10 @@ static int nfa_lexer_step (struct nfa_lexer *o, unsigned c)
 		}
 
 		if (state > 0) {
-			o->stop = p->next;
-			return p->token;
+			if (token <= 0)
+				token = p->token;
+
+			continue;
 		}
 
 		if (token < 0)
