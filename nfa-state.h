@@ -16,8 +16,8 @@ enum nfa_type {
 };
 
 struct nfa_state {
-	int c, id;
 	struct nfa_state *next;
+	int c, id;
 	struct nfa_state *out[2];
 };
 

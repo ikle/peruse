@@ -17,9 +17,9 @@ nfa_state (int c, struct nfa_state *a, struct nfa_state *b)
 
 	s = malloc (sizeof (*s));
 
+	s->next = NULL;
 	s->c = c;
 	s->id = 0;
-	s->next = NULL;
 
 	s->out[0] = a;
 	s->out[1] = b;
