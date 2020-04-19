@@ -19,7 +19,7 @@ nfa_state (int c, struct nfa_state *a, struct nfa_state *b)
 
 	s->next = NULL;
 	s->c = c;
-	s->id = 0;
+	s->index = 0;
 
 	s->out[0] = a;
 	s->out[1] = b;
@@ -42,7 +42,7 @@ void nfa_state_order (struct nfa_state *o)
 	size_t i;
 
 	for (i = 0; o != NULL; ++i, o = o->next)
-		o->id = i;
+		o->index = i;
 }
 
 size_t nfa_state_count (const struct nfa_state *o)

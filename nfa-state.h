@@ -17,7 +17,8 @@ enum nfa_type {
 
 struct nfa_state {
 	struct nfa_state *next;
-	int c, id;
+	int c;
+	int index;	/* used by processor to map state to state index */
 	struct nfa_state *out[2];
 };
 
@@ -30,6 +31,7 @@ struct nfa_state *nfa_state_plus  (struct nfa_state *a);
 
 void nfa_state_free (struct nfa_state *o);
 
+/* set up indexes for NFA state list */
 void nfa_state_order (struct nfa_state *o);
 size_t nfa_state_count (const struct nfa_state *o);
 

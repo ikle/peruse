@@ -75,14 +75,14 @@ static int add_state (struct nfa_proc *o, long *set, const struct nfa_state *s)
 	if (s == NULL)
 		return 1;
 
-	if (bitset_is_member (set, s->id))
+	if (bitset_is_member (set, s->index))
 		return 0;
 
 	if (s->c == NFA_SPLIT)
 		return add_state (o, set, s->out[0]) |
 		       add_state (o, set, s->out[1]);
 
-	bitset_add (set, s->id);
+	bitset_add (set, s->index);
 	return 0;
 }
 
