@@ -77,7 +77,7 @@ start:
 		c = o->in->cursor[i++];
 
 		if ((color = nfa_proc_step (o->proc, c)) < 0)
-			return &o->token;
+			return o->token.id == 0 ? NULL : &o->token;
 
 		if (color > 0) {
 			o->token.id = color;
