@@ -13,7 +13,11 @@
 
 #include "nfa-state.h"
 
-struct nfa_proc *nfa_proc_alloc (const struct nfa_state *nfa);
+/*
+ * The NFA processor constructor captures NFA, no one should try to use
+ * the NFA passed to the constructor.
+ */
+struct nfa_proc *nfa_proc_alloc (struct nfa_state *nfa);
 void nfa_proc_free (struct nfa_proc *o);
 
 /*

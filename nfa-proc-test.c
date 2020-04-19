@@ -49,6 +49,5 @@ int main (int argc, char *argv[])
 			printf ("%s\n", argv[i]);
 
 	nfa_proc_free (proc);
-	nfa_state_free (nfa);
 	return 0;
 }

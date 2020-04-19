@@ -14,20 +14,24 @@
 #include "nfa-state.h"
 
 struct nfa_proc {
-	const struct nfa_state *start;
+	struct nfa_state *start;
 	size_t count;
 	const struct nfa_state **map;
 	long *cset, *nset;
 };
 
-struct nfa_proc *nfa_proc_alloc (const struct nfa_state *nfa)
+/*
+ * The NFA processor constructor captures NFA, no one should try to use
+ * the NFA passed to the constructor.
+ */
+struct nfa_proc *nfa_proc_alloc (struct nfa_state *nfa)
 {
 	struct nfa_proc *o;
 	const struct nfa_state *p;
 	size_t i;
 
 	if ((o = malloc (sizeof (*o))) == NULL)
-		return NULL;
+		goto no_obj;
 
 	o->start = nfa;
 	o->count = nfa_state_count (nfa);
@@ -51,6 +55,8 @@ no_cset:
 	free (o->map);
 no_map:
 	free (o);
+no_obj:
+	nfa_state_free (nfa);
 	return NULL;
 }
 
@@ -59,6 +65,7 @@ void nfa_proc_free (struct nfa_proc *o)
 	bitset_free (o->nset);
 	bitset_free (o->cset);
 	free (o->map);
+	nfa_state_free (o->start);
 	free (o);
 }
 
