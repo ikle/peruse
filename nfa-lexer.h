@@ -9,6 +9,7 @@
 #ifndef NFA_LEXER_H
 #define NFA_LEXER_H  1
 
+#include "input.h"
 #include "nfa-proc.h"
 
 struct nfa_rule {
@@ -17,10 +18,10 @@ struct nfa_rule {
 	int token;
 };
 
-struct nfa_lexer *nfa_lexer_alloc (const struct nfa_rule *start);
+struct nfa_lexer *nfa_lexer_alloc (const struct nfa_rule *start,
+				   struct input *in);
 void nfa_lexer_free (struct nfa_lexer *o);
 
-int nfa_lexer_write (struct nfa_lexer *o, const char *data, size_t len);
 int nfa_lexer_eof (struct nfa_lexer *o);
 
 struct nfa_token {

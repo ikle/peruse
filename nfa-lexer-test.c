@@ -62,47 +62,35 @@ error:
 	return NULL;
 }
 
-static const struct nfa_token *get_token (struct nfa_lexer *lex)
-{
-	const struct nfa_token *tok;
-	char buf[16];
-	size_t count;
-
-	while ((tok = nfa_lexer (lex)) == NULL) {
-		count = fread (buf, 1, sizeof (buf), stdin);
-
-		if (!nfa_lexer_write (lex, buf, count)) {
-			fprintf (stderr, "E: cannot push data into lexer\n");
-			exit (1);
-		}
-	}
-
-	return tok;
-}
-
 int main (int argc, char *argv[])
 {
+	struct input in;
 	struct nfa_rule *set;
 	struct nfa_lexer *lex;
 	const struct nfa_token *tok;
+
+	if (!input_init (&in, 0, NULL, stdin)) {
+		perror ("nfa-lexer-test");
+		return 1;
+	}
 
 	if ((set = compile ()) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot compile lexer\n");
 		return 1;
 	}
 
-	if ((lex = nfa_lexer_alloc (set)) == NULL) {
+	if ((lex = nfa_lexer_alloc (set, &in)) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot construct lexer\n");
 		return 1;
 	}
 
 	for (;;) {
-		tok = get_token (lex);
+		tok = nfa_lexer (lex);
 
 		if (nfa_lexer_eof (lex))
 			break;
 
-		if (tok->id == 0) {
+		if (tok == NULL) {
 			fprintf (stderr, "E: lexical error\n");
 			return 1;
 		}
@@ -111,5 +99,6 @@ int main (int argc, char *argv[])
 	}
 
 	nfa_lexer_free (lex);
+	input_fini (&in);
 	return 0;
 }

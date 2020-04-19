@@ -15,13 +15,14 @@
 struct nfa_lexer {
 	const struct nfa_rule *start;
 	long *set;
+	struct input *in;
 
 	struct nfa_token token;
-	size_t avail, size;
 	int eof;
 };
 
-struct nfa_lexer *nfa_lexer_alloc (const struct nfa_rule *start)
+struct nfa_lexer *nfa_lexer_alloc (const struct nfa_rule *start,
+				   struct input *in)
 {
 	struct nfa_lexer *o;
 	const struct nfa_rule *p;
@@ -37,10 +38,11 @@ struct nfa_lexer *nfa_lexer_alloc (const struct nfa_rule *start)
 	if ((o->set = bitset_alloc (i)) == NULL)
 		goto no_set;
 
+	o->in = in;
+
 	o->token.text = NULL;
 	o->token.len = 0;
 	o->token.id = 0;
-	o->size = o->avail = 0;
 	o->eof = 0;
 
 	return o;
@@ -51,7 +53,6 @@ no_set:
 
 void nfa_lexer_free (struct nfa_lexer *o)
 {
-	free (o->token.text);
 	bitset_free (o->set);
 	free (o);
 }
@@ -99,66 +100,43 @@ static int nfa_lexer_step (struct nfa_lexer *o, unsigned c)
 	return token;
 }
 
-int nfa_lexer_write (struct nfa_lexer *o, const char *data, size_t len)
-{
-	size_t total = o->avail + len;
-	char *text;
-
-	if (len == 0) {
-		o->eof = 1;
-		return 1;
-	}
-
-	if (total > o->size) {
-		if ((text = realloc (o->token.text, total)) == NULL)
-			return 0;
-
-		o->token.text = text;
-		o->size = total;
-	}
-
-	memcpy (o->token.text + o->avail, data, len);
-	o->avail += len;
-	return 1;
-}
-
 int nfa_lexer_eof (struct nfa_lexer *o)
 {
-	return o->eof && o->avail == 0;
+	return o->eof && o->in->avail == 0;
 }
 
 const struct nfa_token *nfa_lexer (struct nfa_lexer *o)
 {
-	size_t i = 0;
+	size_t i;
 	int c, token;
 
-	/* strip old token */
-	memmove (o->token.text, o->token.text + o->token.len,
-		 o->avail - o->token.len);
-	o->avail -= o->token.len;
+	input_eat (o->in, o->token.len);
+start:
+	o->token.id = nfa_lexer_start (o);
 	o->token.len = 0;
 
-	o->token.id = nfa_lexer_start (o);
-
-	while (i < o->avail) {
-		c = o->token.text[i++];
+	for (i = 0; i < o->in->avail;) {
+		c = o->in->cursor[i++];
 
 		if ((token = nfa_lexer_step (o, c)) < 0)
 			return &o->token;
 
 		if (token > 0) {
 			o->token.id = token;
+			o->token.text = (void *) o->in->cursor;
 			o->token.len = i;
 		}
 	}
 
 	if (!o->eof) {
-		o->token.len = 0;
-		return NULL;  /* want more data */
+		if (input_fill (o->in) == 0)
+			o->eof = 1;
+
+		goto start;
 	}
 
-	if (o->token.len != i)
-		o->token.id = 0;
+	if (o->token.id == 0)
+		return NULL;
 
 	return &o->token;
 }
