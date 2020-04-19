@@ -116,8 +116,6 @@ struct nfa_state *re_parse (const char *re, int color)
 	if ((start = re_exp (&o)) == NULL)
 		return NULL;
 
-	if (color != 0)
-		nfa_state_color (start, color);
-
+	nfa_state_color (start, color);
 	return start;
 }
