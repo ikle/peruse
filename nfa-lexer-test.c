@@ -32,40 +32,28 @@ static const struct rule rules[] = {
 	{ 42,	"(a|b)(-?(a|b|0|1))*" },
 };
 
-static struct nfa_rule *compile (void)
+static struct nfa_state *compile_nfa (void)
 {
-	struct nfa_rule *set;
 	size_t i;
-	struct nfa_state *nfa;
-
-	assert (ARRAY_SIZE (rules) > 0);
-
-	if ((set = malloc (sizeof (set[0]) * ARRAY_SIZE (rules))) == NULL)
-		return NULL;
+	struct nfa_state *nfa, *head = NULL;
 
 	for (i = 0; i < ARRAY_SIZE (rules); ++i) {
-		set[i].next = set + i + 1;
-		set[i].token = rules[i].token;
-
-		if ((nfa = re_parse (rules[i].re, rules[i].token)) == NULL ||
-		    (set[i].proc = nfa_proc_alloc (nfa)) == NULL)
+		if ((nfa = re_parse (rules[i].re, rules[i].token)) == NULL)
 			goto error;
+
+		head = head == NULL ? nfa : nfa_state_union (head, nfa);
 	}
 
-	set[i - 1].next = NULL;
-	return set;
+	return head;
 error:
-	for (; i > 0; --i)
-		nfa_proc_free (set[i - 1].proc);
-
-	free (set);
+	nfa_state_free (head);
 	return NULL;
 }
 
 int main (int argc, char *argv[])
 {
 	struct input in;
-	struct nfa_rule *set;
+	struct nfa_state *set;
 	struct nfa_lexer *lex;
 	const struct nfa_token *tok;
 
@@ -74,7 +62,7 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((set = compile ()) == NULL) {
+	if ((set = compile_nfa ()) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot compile lexer\n");
 		return 1;
 	}

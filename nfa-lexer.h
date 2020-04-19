@@ -10,15 +10,13 @@
 #define NFA_LEXER_H  1
 
 #include "input.h"
-#include "nfa-proc.h"
+#include "nfa-state.h"
 
-struct nfa_rule {
-	struct nfa_rule *next;
-	struct nfa_proc *proc;
-	int token;
-};
-
-struct nfa_lexer *nfa_lexer_alloc (const struct nfa_rule *start,
+/*
+ * The NFA lexer constructor captures NFA, no one should try to use
+ * the NFA passed to the constructor.
+ */
+struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start,
 				   struct input *in);
 void nfa_lexer_free (struct nfa_lexer *o);
 
