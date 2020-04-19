@@ -7,7 +7,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "nfa-proc.h"
 #include "re-parser.h"
