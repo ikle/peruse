@@ -67,7 +67,7 @@ static int nfa_lexer_start (struct nfa_lexer *o)
 	o->stop = NULL;
 
 	for (p = o->start, i = 0; p != o->stop; p = p->next, ++i)
-		if (nfa_proc_start (p->proc)) {
+		if (nfa_proc_start (p->proc) && token == 0) {
 			o->stop = p->next;
 			token = p->token;
 		}
