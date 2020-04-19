@@ -114,6 +114,5 @@ struct nfa_state *re_parse (const char *re)
 	o.p = o.in = re;
 
 	start = re_exp (&o);
-	nfa_state_order (start);
 	return start;
 }

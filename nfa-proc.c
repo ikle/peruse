@@ -33,6 +33,8 @@ struct nfa_proc *nfa_proc_alloc (struct nfa_state *nfa)
 	if ((o = malloc (sizeof (*o))) == NULL)
 		goto no_obj;
 
+	nfa_state_order (nfa);
+
 	o->start = nfa;
 	o->count = nfa_state_count (nfa);
 
