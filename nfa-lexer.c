@@ -156,8 +156,10 @@ const struct nfa_token *nfa_lexer (struct nfa_lexer *o)
 		}
 	}
 
-	if (!o->eof)
+	if (!o->eof) {
+		o->token.len = 0;
 		return NULL;  /* want more data */
+	}
 
 	if (o->token.len != i)
 		o->token.id = 0;
