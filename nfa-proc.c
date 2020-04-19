@@ -103,7 +103,7 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 {
 	size_t i;
 	const struct nfa_state *s;
-	int match = 0;
+	int match = 0, error = 1;
 	long *t;
 
 	if (bitset_is_empty (o->cset, o->count))
@@ -118,9 +118,14 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 	) {
 		s = o->map[i];
 
-		if (s->c == c)
+		if (s->c == c) {
+			error = 0;
 			match |= add_state (o, o->nset, s->out[0]);
+		}
 	}
+
+	if (error)
+		return -1;
 
 	t = o->cset; o->cset = o->nset; o->nset = t;  /* swap sets */
 	return match;
