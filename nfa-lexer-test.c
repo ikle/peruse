@@ -72,18 +72,12 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	for (;;) {
-		tok = nfa_lexer (lex);
-
-		if (nfa_lexer_eof (lex))
-			break;
-
-		if (tok == NULL) {
-			fprintf (stderr, "E: lexical error\n");
-			return 1;
-		}
-
+	while ((tok = nfa_lexer (lex)) != NULL)
 		printf ("%d: '%.*s'\n", tok->id, (int) tok->len, tok->text);
+
+	if (!nfa_lexer_eof (lex)) {
+		fprintf (stderr, "E: lexical error\n");
+		return 1;
 	}
 
 	nfa_lexer_free (lex);
