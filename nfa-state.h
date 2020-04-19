@@ -17,7 +17,7 @@ enum nfa_type {
 
 struct nfa_state {
 	struct nfa_state *next;
-	int c;
+	short c;
 	int index;	/* used by processor to map state to state index */
 	struct nfa_state *out[2];
 };
