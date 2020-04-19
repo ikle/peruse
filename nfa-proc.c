@@ -108,9 +108,6 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 	int match = 0, error = 1;
 	long *t;
 
-	if (bitset_is_empty (o->cset, o->count))
-		return -1;
-
 	bitset_clear (o->nset, o->count);
 
 	for (
