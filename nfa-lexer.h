@@ -25,9 +25,10 @@ int nfa_lexer_eof (struct nfa_lexer *o);
 struct nfa_token {
 	char *text;
 	size_t len;
-	int id;		/* zero on error */
+	int id;
 };
 
+/* returns NULL on error, matched token overwise */
 const struct nfa_token *nfa_lexer (struct nfa_lexer *o);
 
 #endif  /* NFA_LEXER_H */
