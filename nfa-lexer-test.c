@@ -47,7 +47,7 @@ static struct nfa_rule *compile (void)
 		set[i].next = set + i + 1;
 		set[i].token = rules[i].token;
 
-		if ((nfa = re_parse (rules[i].re)) == NULL ||
+		if ((nfa = re_parse (rules[i].re, rules[i].token)) == NULL ||
 		    (set[i].proc = nfa_proc_alloc (nfa)) == NULL)
 			goto error;
 	}

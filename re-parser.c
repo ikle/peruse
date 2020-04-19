@@ -106,13 +106,18 @@ static struct nfa_state *re_exp (struct re_parser *o)
 	return a;
 }
 
-struct nfa_state *re_parse (const char *re)
+struct nfa_state *re_parse (const char *re, int color)
 {
 	struct re_parser o;
 	struct nfa_state *start;
 
 	o.p = o.in = re;
 
-	start = re_exp (&o);
+	if ((start = re_exp (&o)) == NULL)
+		return NULL;
+
+	if (color != 0)
+		nfa_state_color (start, color);
+
 	return start;
 }

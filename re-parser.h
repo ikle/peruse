@@ -11,6 +11,6 @@
 
 #include "nfa-state.h"
 
-struct nfa_state *re_parse (const char *re);
+struct nfa_state *re_parse (const char *re, int color);
 
 #endif  /* RE_PARSER_H */

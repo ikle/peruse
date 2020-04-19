@@ -33,7 +33,7 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((nfa = re_parse (argv[1])) == NULL) {
+	if ((nfa = re_parse (argv[1], 0)) == NULL) {
 		fprintf (stderr, "nfa-test: cannot compile RE\n");
 		return 1;
 	}
