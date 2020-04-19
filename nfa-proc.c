@@ -99,7 +99,7 @@ int nfa_proc_start (struct nfa_proc *o)
 }
 
 /*
- * returns -1 on error (no match), 1 on match, zero otherwise
+ * returns -1 on error (no match), node color on match, zero otherwise
  */
 int nfa_proc_step (struct nfa_proc *o, unsigned c)
 {
@@ -119,7 +119,9 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 
 		if (s->c == c) {
 			error = 0;
-			match |= add_state (o, o->nset, s->out[0]);
+
+			if (add_state (o, o->nset, s->out[0]) && match == 0)
+				match = s->color;
 		}
 	}
 
