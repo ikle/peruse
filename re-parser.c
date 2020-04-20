@@ -52,7 +52,7 @@ static struct nfa_state *re_set (struct re_parser *o)
 
 	re_next (o);
 
-	for (a = NULL; re_peek (o) != ']';) {
+	for (a = NULL; a == NULL || re_peek (o) != ']';) {
 		b = nfa_state_atom (re_next (o));
 		a = a == NULL ? b : nfa_state_union (a, b);
 	}
