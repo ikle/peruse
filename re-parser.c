@@ -13,7 +13,12 @@
 
 static struct nfa_state *re_char (struct re_lexer *o)
 {
-	return nfa_state_atom (re_lexer_next (o));
+	int c;
+
+	if ((c = re_lexer_next (o)) == RE_EOI)
+		return NULL;
+
+	return nfa_state_atom (c);
 }
 
 static struct nfa_state *re_set (struct re_lexer *o)
@@ -21,7 +26,8 @@ static struct nfa_state *re_set (struct re_lexer *o)
 	int c;
 	struct nfa_state *a, *b;
 
-	a = re_char (o);
+	if ((a = re_char (o)) == NULL)
+		return NULL;
 
 	while ((c = re_lexer_peek (o)) != RE_SET_CLOSE && c != RE_EOI) {
 		b = re_char (o);
@@ -40,24 +46,40 @@ static struct nfa_state *re_atom (struct re_lexer *o)
 
 	if ((c = re_lexer_peek (o)) == RE_OPEN) {
 		re_lexer_next (o);
-		a = re_exp (o);
-		re_lexer_eat (o, RE_CLOSE);  /* OOPS: throw error here */
+
+		if ((a = re_exp (o)) == NULL)
+			return NULL;
+
+		if (!re_lexer_eat (o, RE_CLOSE))
+			goto error;
+
 		return a;
 	}
 	else if (c == RE_SET_OPEN) {
 		re_lexer_next (o);
-		a = re_set (o);
-		re_lexer_eat (o, RE_SET_CLOSE);  /* OOPS: throw error here */
+
+		if ((a = re_set (o)) == NULL)
+			return NULL;
+
+		if (!re_lexer_eat (o, RE_SET_CLOSE))
+			goto error;
+
 		return a;;
 	}
 
 	return re_char (o);
+error:
+	nfa_state_free (a);
+	return NULL;
 }
 
 static struct nfa_state *re_piece (struct re_lexer *o)
 {
-	struct nfa_state *a = re_atom (o);
+	struct nfa_state *a;
 	int c;
+
+	if ((a = re_atom (o)) == NULL)
+		return NULL;
 
 	while ((c = re_lexer_peek (o)) != RE_EOI)
 		switch (c) {
@@ -82,26 +104,45 @@ static struct nfa_state *re_piece (struct re_lexer *o)
 
 static struct nfa_state *re_branch (struct re_lexer *o)
 {
-	struct nfa_state *a = re_piece (o);
+	struct nfa_state *a, *b;
 	int c;
 
+	if ((a = re_piece (o)) == NULL)
+		return NULL;
+
 	while ((c = re_lexer_peek (o)) != RE_EOI && c != RE_CLOSE &&
-	       c != RE_BRANCH)
-		a = nfa_state_cat (a, re_piece (o));
+	       c != RE_BRANCH) {
+		if ((b = re_piece (o)) == NULL)
+			goto error;
+
+		a = nfa_state_cat (a, b);
+	}
 
 	return a;
+error:
+	nfa_state_free (a);
+	return NULL;
 }
 
 static struct nfa_state *re_exp (struct re_lexer *o)
 {
-	struct nfa_state *a = re_branch (o);
+	struct nfa_state *a, *b;
+
+	if ((a = re_branch (o)) == NULL)
+		return NULL;
 
 	while (re_lexer_peek (o) == RE_BRANCH) {
 		re_lexer_next (o);
-		a = nfa_state_union (a, re_branch (o));
+		if ((b = re_branch (o)) == NULL)
+			goto error;
+
+		a = nfa_state_union (a, b);
 	}
 
 	return a;
+error:
+	nfa_state_free (a);
+	return NULL;
 }
 
 struct nfa_state *re_parse (const char *re, int color)
