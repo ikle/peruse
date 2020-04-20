@@ -11,15 +11,20 @@
 
 /* RE recursive descent parser */
 
+static struct nfa_state *re_char (struct re_lexer *o)
+{
+	return nfa_state_atom (re_lexer_next (o));
+}
+
 static struct nfa_state *re_set (struct re_lexer *o)
 {
 	int c;
 	struct nfa_state *a, *b;
 
-	a = nfa_state_atom (re_lexer_next (o));
+	a = re_char (o);
 
 	while ((c = re_lexer_peek (o)) != RE_SET_CLOSE && c != RE_EOI) {
-		b = nfa_state_atom (re_lexer_next (o));
+		b = re_char (o);
 		a = nfa_state_union (a, b);
 	}
 
@@ -46,7 +51,7 @@ static struct nfa_state *re_atom (struct re_lexer *o)
 		return a;;
 	}
 
-	return nfa_state_atom (re_lexer_next (o));
+	return re_char (o);
 }
 
 static struct nfa_state *re_piece (struct re_lexer *o)
