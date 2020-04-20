@@ -43,6 +43,24 @@ static int re_eat (struct re_parser *o, int c)
 
 static struct nfa_state *re_exp (struct re_parser *o);
 
+static struct nfa_state *re_set (struct re_parser *o)
+{
+	struct nfa_state *a, *b;
+
+	if (re_peek (o) != '[')
+		return nfa_state_atom (re_next (o));
+
+	re_next (o);
+
+	for (a = NULL; re_peek (o) != ']';) {
+		b = nfa_state_atom (re_next (o));
+		a = a == NULL ? b : nfa_state_union (a, b);
+	}
+
+	re_next (o);
+	return a;
+}
+
 static struct nfa_state *re_base (struct re_parser *o)
 {
 	struct nfa_state *a;
@@ -54,7 +72,7 @@ static struct nfa_state *re_base (struct re_parser *o)
 		return a;
 	}
 
-	return nfa_state_atom (re_next (o));
+	return re_set (o);
 }
 
 static struct nfa_state *re_piece (struct re_parser *o)

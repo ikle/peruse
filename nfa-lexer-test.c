@@ -27,9 +27,9 @@ static const struct rule rules[] = {
 	{ 11,	"then" },
 	{ 12,	"else" },
 
-	{ 40,	"( |\t|\n)+" },
-	{ 41,	"0|(1(0|1)*)" },
-	{ 42,	"(a|b)(-?(a|b|0|1))*" },
+	{ 40,	"[ \t\n]+" },
+	{ 41,	"0|(1[01]*)" },
+	{ 42,	"[ab](-?[ab01])*" },
 };
 
 static struct nfa_state *compile_nfa (void)
