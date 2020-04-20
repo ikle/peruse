@@ -15,6 +15,7 @@ static struct nfa_state *re_exp (struct re_lexer *o);
 
 static struct nfa_state *re_set (struct re_lexer *o)
 {
+	int c;
 	struct nfa_state *a, *b;
 
 	if (re_lexer_peek (o) != RE_SET_OPEN)
@@ -22,9 +23,14 @@ static struct nfa_state *re_set (struct re_lexer *o)
 
 	re_lexer_next (o);
 
-	for (a = NULL; a == NULL || re_lexer_peek (o) != RE_SET_CLOSE;) {
+	if ((c = re_lexer_peek (o)) == RE_EOI)
+		return nfa_state_atom ('[');
+
+	a = nfa_state_atom (re_lexer_next (o));
+
+	while ((c = re_lexer_peek (o)) != RE_SET_CLOSE && c != RE_EOI) {
 		b = nfa_state_atom (re_lexer_next (o));
-		a = a == NULL ? b : nfa_state_union (a, b);
+		a = nfa_state_union (a, b);
 	}
 
 	re_lexer_next (o);
