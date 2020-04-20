@@ -18,14 +18,6 @@ static struct nfa_state *re_set (struct re_lexer *o)
 	int c;
 	struct nfa_state *a, *b;
 
-	if (re_lexer_peek (o) != RE_SET_OPEN)
-		return nfa_state_atom (re_lexer_next (o));
-
-	re_lexer_next (o);
-
-	if ((c = re_lexer_peek (o)) == RE_EOI)
-		return nfa_state_atom ('[');
-
 	a = nfa_state_atom (re_lexer_next (o));
 
 	while ((c = re_lexer_peek (o)) != RE_SET_CLOSE && c != RE_EOI) {
@@ -33,27 +25,33 @@ static struct nfa_state *re_set (struct re_lexer *o)
 		a = nfa_state_union (a, b);
 	}
 
-	re_lexer_next (o);
 	return a;
 }
 
-static struct nfa_state *re_base (struct re_lexer *o)
+static struct nfa_state *re_atom (struct re_lexer *o)
 {
+	int c;
 	struct nfa_state *a;
 
-	if (re_lexer_peek (o) == RE_OPEN) {
+	if ((c = re_lexer_peek (o)) == RE_OPEN) {
 		re_lexer_next (o);
 		a = re_exp (o);
 		re_lexer_eat (o, RE_CLOSE);  /* OOPS: throw error here */
 		return a;
 	}
+	else if (c == RE_SET_OPEN) {
+		re_lexer_next (o);
+		a = re_set (o);
+		re_lexer_eat (o, RE_SET_CLOSE);  /* OOPS: throw error here */
+		return a;;
+	}
 
-	return re_set (o);
+	return nfa_state_atom (re_lexer_next (o));
 }
 
 static struct nfa_state *re_piece (struct re_lexer *o)
 {
-	struct nfa_state *a = re_base (o);
+	struct nfa_state *a = re_atom (o);
 	int c;
 
 	while ((c = re_lexer_peek (o)) != RE_EOI)
