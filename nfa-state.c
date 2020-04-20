@@ -11,14 +11,15 @@
 #include "nfa-state.h"
 
 static struct nfa_state *
-nfa_state (int c, struct nfa_state *a, struct nfa_state *b)
+nfa_state (int from, int to, struct nfa_state *a, struct nfa_state *b)
 {
 	struct nfa_state *s;
 
 	s = malloc (sizeof (*s));
 
 	s->next = NULL;
-	s->c = c;
+	s->from = from;
+	s->to   = to;
 	s->index = 0;
 
 	s->out[0] = a;
@@ -64,14 +65,19 @@ void nfa_state_color (struct nfa_state *o, int color)
 
 /* NFA leaf node constructors */
 
+struct nfa_state *nfa_state_range (unsigned from, unsigned to)
+{
+	return nfa_state (from, to, NULL, NULL);
+}
+
 struct nfa_state *nfa_state_atom (unsigned c)
 {
-	return nfa_state (c, NULL, NULL);
+	return nfa_state (c, c, NULL, NULL);
 }
 
 static struct nfa_state *nfa_split (struct nfa_state *a, struct nfa_state *b)
 {
-	return nfa_state (NFA_SPLIT, a, b);
+	return nfa_state (NFA_SPLIT, 0, a, b);
 }
 
 /* NFA node helper ops */

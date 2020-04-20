@@ -80,7 +80,7 @@ static int add_state (struct nfa_proc *o, long *set, const struct nfa_state *s)
 	if (bitset_is_member (set, s->index))
 		return 0;
 
-	if (s->c == NFA_SPLIT)
+	if (s->from == NFA_SPLIT)
 		return add_state (o, set, s->out[0]) |
 		       add_state (o, set, s->out[1]);
 
@@ -117,7 +117,7 @@ int nfa_proc_step (struct nfa_proc *o, unsigned c)
 	) {
 		s = o->map[i];
 
-		if (s->c == c) {
+		if (s->from <= c && c <= s->to) {
 			error = 0;
 
 			if (add_state (o, o->nset, s->out[0]) && match == 0)

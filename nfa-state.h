@@ -17,12 +17,13 @@ enum nfa_type {
 
 struct nfa_state {
 	struct nfa_state *next;
-	short c;
+	short from, to;
 	int index;	/* used by processor to map state to state index */
 	struct nfa_state *out[2];
 	short color;	/* used by lexer to distinguish rules, 1 by default */
 };
 
+struct nfa_state *nfa_state_range (unsigned from, unsigned to);
 struct nfa_state *nfa_state_atom  (unsigned c);
 struct nfa_state *nfa_state_cat   (struct nfa_state *a, struct nfa_state *b);
 struct nfa_state *nfa_state_union (struct nfa_state *a, struct nfa_state *b);
