@@ -19,12 +19,12 @@ nfa_state (int c, struct nfa_state *a, struct nfa_state *b)
 
 	s->next = NULL;
 	s->c = c;
-	s->color = 1;
 	s->index = 0;
 
 	s->out[0] = a;
 	s->out[1] = b;
 
+	s->color = 1;
 	return s;
 }
 

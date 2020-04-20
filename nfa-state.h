@@ -18,9 +18,9 @@ enum nfa_type {
 struct nfa_state {
 	struct nfa_state *next;
 	short c;
-	short color;	/* used by lexer to distinguish rules, 1 by default */
 	int index;	/* used by processor to map state to state index */
 	struct nfa_state *out[2];
+	short color;	/* used by lexer to distinguish rules, 1 by default */
 };
 
 struct nfa_state *nfa_state_atom  (unsigned c);
