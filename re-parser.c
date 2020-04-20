@@ -66,6 +66,10 @@ static struct nfa_state *re_atom (struct re_lexer *o)
 
 		return a;;
 	}
+	else if (c == '\\') {
+		re_lexer_next (o);
+		return re_char (o);
+	}
 
 	return re_char (o);
 error:

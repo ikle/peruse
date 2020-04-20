@@ -11,20 +11,18 @@
 
 struct re_lexer {
 	const char *p;
-	unsigned len;
-	int last, in_set;
 };
 
 enum re_token {
-	RE_EOI		= -1,
-	RE_BRANCH	= -2,
-	RE_OPEN		= -3,
-	RE_CLOSE	= -4,
-	RE_SET_OPEN	= -5,
-	RE_SET_CLOSE	= -6,
-	RE_OPT		= -7,
-	RE_STAR		= -8,
-	RE_PLUS		= -9,
+	RE_EOI		= '\0',
+	RE_BRANCH	= '|',
+	RE_OPEN		= '(',
+	RE_CLOSE	= ')',
+	RE_SET_OPEN	= '[',
+	RE_SET_CLOSE	= ']',
+	RE_OPT		= '?',
+	RE_STAR		= '*',
+	RE_PLUS		= '+',
 };
 
 void re_lexer_init (struct re_lexer *o, const char *re);
