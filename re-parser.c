@@ -11,7 +11,7 @@
 /* parser state and helpers */
 
 struct re_parser {
-	const char *in, *p;
+	const char *p;
 };
 
 static int re_peek (struct re_parser *o)
@@ -129,7 +129,7 @@ struct nfa_state *re_parse (const char *re, int color)
 	struct re_parser o;
 	struct nfa_state *start;
 
-	o.p = o.in = re;
+	o.p = re;
 
 	if ((start = re_exp (&o)) == NULL)
 		return NULL;
