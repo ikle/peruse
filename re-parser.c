@@ -11,8 +11,6 @@
 
 /* RE recursive descent parser */
 
-static struct nfa_state *re_exp (struct re_lexer *o);
-
 static struct nfa_state *re_set (struct re_lexer *o)
 {
 	int c;
@@ -27,6 +25,8 @@ static struct nfa_state *re_set (struct re_lexer *o)
 
 	return a;
 }
+
+static struct nfa_state *re_exp (struct re_lexer *o);
 
 static struct nfa_state *re_atom (struct re_lexer *o)
 {
