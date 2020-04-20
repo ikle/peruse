@@ -6,91 +6,62 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+#include "re-lexer.h"
 #include "re-parser.h"
-
-/* parser state and helpers */
-
-struct re_parser {
-	const char *p;
-};
-
-static int re_peek (struct re_parser *o)
-{
-	return *o->p;
-}
-
-static int re_next (struct re_parser *o)
-{
-	int c;
-
-	if ((c = re_peek (o)) != '\0')
-		++o->p;
-
-	return c;
-}
-
-static int re_eat (struct re_parser *o, int c)
-{
-	if (re_peek (o) != c)
-		return 0;
-
-	re_next (o);
-	return 1;
-}
 
 /* RE recursive descent parser */
 
-static struct nfa_state *re_exp (struct re_parser *o);
+static struct nfa_state *re_exp (struct re_lexer *o);
 
-static struct nfa_state *re_set (struct re_parser *o)
+static struct nfa_state *re_set (struct re_lexer *o)
 {
 	struct nfa_state *a, *b;
 
-	if (re_peek (o) != '[')
-		return nfa_state_atom (re_next (o));
+	if (re_lexer_peek (o) != RE_SET_OPEN)
+		return nfa_state_atom (re_lexer_next (o));
 
-	re_next (o);
+	re_lexer_next (o);
 
-	for (a = NULL; a == NULL || re_peek (o) != ']';) {
-		b = nfa_state_atom (re_next (o));
+	for (a = NULL; a == NULL || re_lexer_peek (o) != RE_SET_CLOSE;) {
+		b = nfa_state_atom (re_lexer_next (o));
 		a = a == NULL ? b : nfa_state_union (a, b);
 	}
 
-	re_next (o);
+	re_lexer_next (o);
 	return a;
 }
 
-static struct nfa_state *re_base (struct re_parser *o)
+static struct nfa_state *re_base (struct re_lexer *o)
 {
 	struct nfa_state *a;
 
-	if (re_peek (o) == '(') {
-		re_next (o);
+	if (re_lexer_peek (o) == RE_OPEN) {
+		re_lexer_next (o);
 		a = re_exp (o);
-		re_eat (o, ')');  /* OOPS: throw error here */
+		re_lexer_eat (o, RE_CLOSE);  /* OOPS: throw error here */
 		return a;
 	}
 
 	return re_set (o);
 }
 
-static struct nfa_state *re_piece (struct re_parser *o)
+static struct nfa_state *re_piece (struct re_lexer *o)
 {
 	struct nfa_state *a = re_base (o);
 	int c;
 
-	while ((c = re_peek (o)) != '\0')
+	while ((c = re_lexer_peek (o)) != RE_EOI)
 		switch (c) {
-		case '?':
-			re_next (o);
+		case RE_OPT:
+			re_lexer_next (o);
 			a = nfa_state_opt (a);
 			break;
-		case '*':
-			re_next (o);
+		case RE_STAR:
+			re_lexer_next (o);
 			a = nfa_state_star (a);
 			break;
-		case '+':
-			re_next (o);
+		case RE_PLUS:
+			re_lexer_next (o);
 			a = nfa_state_plus (a);
 			break;
 		default:
@@ -100,23 +71,24 @@ static struct nfa_state *re_piece (struct re_parser *o)
 	return a;
 }
 
-static struct nfa_state *re_branch (struct re_parser *o)
+static struct nfa_state *re_branch (struct re_lexer *o)
 {
 	struct nfa_state *a = re_piece (o);
 	int c;
 
-	while ((c = re_peek (o)) != '\0' && c != ')' && c != '|')
+	while ((c = re_lexer_peek (o)) != RE_EOI && c != RE_CLOSE &&
+	       c != RE_BRANCH)
 		a = nfa_state_cat (a, re_piece (o));
 
 	return a;
 }
 
-static struct nfa_state *re_exp (struct re_parser *o)
+static struct nfa_state *re_exp (struct re_lexer *o)
 {
 	struct nfa_state *a = re_branch (o);
 
-	while (re_peek (o) == '|') {
-		re_next (o);
+	while (re_lexer_peek (o) == RE_BRANCH) {
+		re_lexer_next (o);
 		a = nfa_state_union (a, re_branch (o));
 	}
 
@@ -125,10 +97,10 @@ static struct nfa_state *re_exp (struct re_parser *o)
 
 struct nfa_state *re_parse (const char *re, int color)
 {
-	struct re_parser o;
+	struct re_lexer o;
 	struct nfa_state *start;
 
-	o.p = re;
+	re_lexer_init (&o, re);
 
 	if ((start = re_exp (&o)) == NULL)
 		return NULL;
