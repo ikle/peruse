@@ -23,10 +23,9 @@ static int re_next (struct re_parser *o)
 {
 	int c;
 
-	if ((c = re_peek (o)) == '\0')
-		return '\0';
+	if ((c = re_peek (o)) != '\0')
+		++o->p;
 
-	++o->p;
 	return c;
 }
 
