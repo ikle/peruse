@@ -22,7 +22,7 @@ int re_lexer_next (struct re_lexer *o)
 {
 	int c;
 
-	if ((c = re_lexer_peek (o)) == RE_EOI)
+	if ((c = re_lexer_peek (o)) == '\0')
 		return c;
 
 	++o->p;

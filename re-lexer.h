@@ -13,18 +13,6 @@ struct re_lexer {
 	const char *p;
 };
 
-enum re_token {
-	RE_EOI		= '\0',
-	RE_BRANCH	= '|',
-	RE_OPEN		= '(',
-	RE_CLOSE	= ')',
-	RE_SET_OPEN	= '[',
-	RE_SET_CLOSE	= ']',
-	RE_OPT		= '?',
-	RE_STAR		= '*',
-	RE_PLUS		= '+',
-};
-
 void re_lexer_init (struct re_lexer *o, const char *re);
 
 int re_lexer_peek (struct re_lexer *o);

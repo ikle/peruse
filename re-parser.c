@@ -15,7 +15,7 @@ static struct nfa_state *re_char (struct re_lexer *o)
 {
 	int c;
 
-	if ((c = re_lexer_next (o)) == RE_EOI)
+	if ((c = re_lexer_next (o)) == '\0')
 		return NULL;
 
 	return nfa_state_atom (c);
@@ -29,7 +29,7 @@ static struct nfa_state *re_set (struct re_lexer *o)
 	if ((a = re_char (o)) == NULL)
 		return NULL;
 
-	while ((c = re_lexer_peek (o)) != RE_SET_CLOSE && c != RE_EOI) {
+	while ((c = re_lexer_peek (o)) != ']' && c != '\0') {
 		b = re_char (o);
 		a = nfa_state_union (a, b);
 	}
@@ -44,24 +44,24 @@ static struct nfa_state *re_atom (struct re_lexer *o)
 	int c;
 	struct nfa_state *a;
 
-	if ((c = re_lexer_peek (o)) == RE_OPEN) {
+	if ((c = re_lexer_peek (o)) == '(') {
 		re_lexer_next (o);
 
 		if ((a = re_exp (o)) == NULL)
 			return NULL;
 
-		if (!re_lexer_eat (o, RE_CLOSE))
+		if (!re_lexer_eat (o, ')'))
 			goto error;
 
 		return a;
 	}
-	else if (c == RE_SET_OPEN) {
+	else if (c == '[') {
 		re_lexer_next (o);
 
 		if ((a = re_set (o)) == NULL)
 			return NULL;
 
-		if (!re_lexer_eat (o, RE_SET_CLOSE))
+		if (!re_lexer_eat (o, ']'))
 			goto error;
 
 		return a;;
@@ -85,17 +85,17 @@ static struct nfa_state *re_piece (struct re_lexer *o)
 	if ((a = re_atom (o)) == NULL)
 		return NULL;
 
-	while ((c = re_lexer_peek (o)) != RE_EOI)
+	while ((c = re_lexer_peek (o)) != '\0')
 		switch (c) {
-		case RE_OPT:
+		case '?':
 			re_lexer_next (o);
 			a = nfa_state_opt (a);
 			break;
-		case RE_STAR:
+		case '*':
 			re_lexer_next (o);
 			a = nfa_state_star (a);
 			break;
-		case RE_PLUS:
+		case '+':
 			re_lexer_next (o);
 			a = nfa_state_plus (a);
 			break;
@@ -114,8 +114,7 @@ static struct nfa_state *re_branch (struct re_lexer *o)
 	if ((a = re_piece (o)) == NULL)
 		return NULL;
 
-	while ((c = re_lexer_peek (o)) != RE_EOI && c != RE_CLOSE &&
-	       c != RE_BRANCH) {
+	while ((c = re_lexer_peek (o)) != '\0' && c != ')' && c != '|') {
 		if ((b = re_piece (o)) == NULL)
 			goto error;
 
@@ -135,7 +134,7 @@ static struct nfa_state *re_exp (struct re_lexer *o)
 	if ((a = re_branch (o)) == NULL)
 		return NULL;
 
-	while (re_lexer_peek (o) == RE_BRANCH) {
+	while (re_lexer_peek (o) == '|') {
 		re_lexer_next (o);
 		if ((b = re_branch (o)) == NULL)
 			goto error;
