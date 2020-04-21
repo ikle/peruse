@@ -88,6 +88,10 @@ static struct nfa_state *re_atom (struct re_lexer *o)
 		re_lexer_next (o);
 		return re_char (o);
 	}
+	else if (c == '.') {
+		re_lexer_next (o);
+		return nfa_state_range (0, 255);
+	}
 
 	return re_char (o);
 error:
