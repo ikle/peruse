@@ -21,16 +21,34 @@ static struct nfa_state *re_char (struct re_lexer *o)
 	return nfa_state_atom (c);
 }
 
+static struct nfa_state *re_range (struct re_lexer *o)
+{
+	int a, b;
+
+	if ((a = re_lexer_next (o)) == '\0')
+		return NULL;
+
+	if (re_lexer_peek (o) != '-')
+		return nfa_state_atom (a);
+
+	re_lexer_next (o);
+
+	if ((b = re_lexer_next (o)) == '\0')
+		return NULL;
+
+	return nfa_state_range (a, b);
+}
+
 static struct nfa_state *re_set (struct re_lexer *o)
 {
 	int c;
 	struct nfa_state *a, *b;
 
-	if ((a = re_char (o)) == NULL)
+	if ((a = re_range (o)) == NULL)
 		return NULL;
 
 	while ((c = re_lexer_peek (o)) != ']' && c != '\0') {
-		b = re_char (o);
+		b = re_range (o);
 		a = nfa_state_union (a, b);
 	}
 
