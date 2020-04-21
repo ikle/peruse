@@ -29,7 +29,7 @@ static const struct rule rules[] = {
 
 	{ 40,	"[ \t\n]+" },
 	{ 41,	"0|(1[01]*)" },
-	{ 42,	"[ab](-?[ab01])*" },
+	{ 42,	"[ab](-?[a-z0-9])*" },
 };
 
 static struct nfa_state *compile_nfa (void)
