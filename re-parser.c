@@ -48,11 +48,16 @@ static struct nfa_state *re_set (struct re_lexer *o)
 		return NULL;
 
 	while ((c = re_lexer_peek (o)) != ']' && c != '\0') {
-		b = re_range (o);
+		if ((b = re_range (o)) == NULL)
+			goto error;
+
 		a = nfa_state_union (a, b);
 	}
 
 	return a;
+error:
+	nfa_state_free (a);
+	return NULL;
 }
 
 static struct nfa_state *re_exp (struct re_lexer *o);
