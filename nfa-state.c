@@ -76,12 +76,12 @@ struct nfa_state *nfa_state_atom (unsigned c)
 	return nfa_state (c, c, NULL, NULL);
 }
 
+/* NFA node helper ops */
+
 static struct nfa_state *nfa_split (struct nfa_state *a, struct nfa_state *b)
 {
 	return nfa_state (NFA_SPLIT, 0, a, b);
 }
-
-/* NFA node helper ops */
 
 static void nfa_merge (struct nfa_state *a, struct nfa_state *b)
 {
