@@ -66,14 +66,14 @@ void nfa_state_color (struct nfa_state *o, int color)
 
 /* NFA leaf node constructors */
 
-struct nfa_state *nfa_state_range (unsigned from, unsigned to)
-{
-	return nfa_state (from, to, NULL, NULL);
-}
-
 struct nfa_state *nfa_state_atom (unsigned c)
 {
 	return nfa_state (c, c, NULL, NULL);
+}
+
+struct nfa_state *nfa_state_range (unsigned from, unsigned to)
+{
+	return nfa_state (from, to, NULL, NULL);
 }
 
 /* NFA node helper ops */
