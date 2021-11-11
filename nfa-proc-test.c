@@ -8,7 +8,8 @@
 
 #include <stdio.h>
 
-#include "nfa-proc.h"
+#include <peruse/nfa-proc.h>
+
 #include "re-parser.h"
 
 static int nfa_proc_match (struct nfa_proc *o, const char *s)

@@ -1,17 +1,15 @@
 /*
  * Thompson NFA processor
  *
- * Copyright (c) 2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef NFA_PROC_H
-#define NFA_PROC_H  1
+#ifndef PERUSE_NFA_PROC_H
+#define PERUSE_NFA_PROC_H  1
 
-#include <stddef.h>
-
-#include "nfa-state.h"
+#include <peruse/nfa-state.h>
 
 /*
  * The NFA processor constructor captures NFA, no one should try to use
@@ -28,6 +26,6 @@ int nfa_proc_start (struct nfa_proc *o);
 /*
  * returns -1 on error (no match), node color on match, zero otherwise
  */
-int nfa_proc_step  (struct nfa_proc *o, unsigned c);
+int nfa_proc_step (struct nfa_proc *o, unsigned c);
 
-#endif  /* NFA_PROC_H */
+#endif  /* PERUSE_NFA_PROC_H */
