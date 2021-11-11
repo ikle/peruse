@@ -1,7 +1,7 @@
 /*
  * Thompson NFA State
  *
- * Copyright (c) 2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -15,7 +15,8 @@ nfa_state (int from, int to, struct nfa_state *a, struct nfa_state *b)
 {
 	struct nfa_state *s;
 
-	s = malloc (sizeof (*s));
+	if ((s = malloc (sizeof (*s))) == NULL)
+		return NULL;
 
 	s->next = NULL;
 	s->from = from;
