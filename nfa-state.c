@@ -80,7 +80,16 @@ struct nfa_state *nfa_state_range (unsigned from, unsigned to)
 
 static struct nfa_state *nfa_split (struct nfa_state *a, struct nfa_state *b)
 {
-	return nfa_state (NFA_SPLIT, 0, a, b);
+	struct nfa_state *o;
+
+	if ((o = nfa_state (NFA_SPLIT, 0, a, b)) == NULL)
+		goto no_state;
+
+	return o;
+no_state:
+	nfa_state_free (a);
+	nfa_state_free (b);
+	return NULL;
 }
 
 static void nfa_merge (struct nfa_state *a, struct nfa_state *b)
@@ -112,7 +121,10 @@ struct nfa_state *nfa_state_cat (struct nfa_state *a, struct nfa_state *b)
 
 struct nfa_state *nfa_state_union (struct nfa_state *a, struct nfa_state *b)
 {
-	struct nfa_state *o = nfa_split (a, b);
+	struct nfa_state *o;
+
+	if ((o = nfa_split (a, b)) == NULL)
+		return NULL;
 
 	nfa_merge (o, a);
 	nfa_merge (o, b);
@@ -121,7 +133,10 @@ struct nfa_state *nfa_state_union (struct nfa_state *a, struct nfa_state *b)
 
 struct nfa_state *nfa_state_opt (struct nfa_state *a)
 {
-	struct nfa_state *o = nfa_split (a, NULL);
+	struct nfa_state *o;
+
+	if ((o = nfa_split (a, NULL)) == NULL)
+		return NULL;
 
 	nfa_merge (o, a);
 	return o;
@@ -129,7 +144,10 @@ struct nfa_state *nfa_state_opt (struct nfa_state *a)
 
 struct nfa_state *nfa_state_star (struct nfa_state *a)
 {
-	struct nfa_state *o = nfa_split (a, NULL);
+	struct nfa_state *o;
+
+	if ((o = nfa_split (a, NULL)) == NULL)
+		return NULL;
 
 	nfa_join  (a, o);
 	nfa_merge (o, a);
@@ -138,7 +156,10 @@ struct nfa_state *nfa_state_star (struct nfa_state *a)
 
 struct nfa_state *nfa_state_plus (struct nfa_state *a)
 {
-	struct nfa_state *o = nfa_split (a, NULL);
+	struct nfa_state *o;
+
+	if ((o = nfa_split (a, NULL)) == NULL)
+		return NULL;
 
 	nfa_join  (a, o);
 	nfa_merge (a, o);
