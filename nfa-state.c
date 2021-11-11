@@ -13,21 +13,21 @@
 static struct nfa_state *
 nfa_state (int from, int to, struct nfa_state *a, struct nfa_state *b)
 {
-	struct nfa_state *s;
+	struct nfa_state *o;
 
-	if ((s = malloc (sizeof (*s))) == NULL)
+	if ((o = malloc (sizeof (*o))) == NULL)
 		return NULL;
 
-	s->next = NULL;
-	s->from = from;
-	s->to   = to;
-	s->index = 0;
+	o->next = NULL;
+	o->from = from;
+	o->to   = to;
+	o->index = 0;
 
-	s->out[0] = a;
-	s->out[1] = b;
+	o->out[0] = a;
+	o->out[1] = b;
 
-	s->color = 1;
-	return s;
+	o->color = 1;
+	return o;
 }
 
 void nfa_state_free (struct nfa_state *o)
@@ -112,35 +112,35 @@ struct nfa_state *nfa_state_cat (struct nfa_state *a, struct nfa_state *b)
 
 struct nfa_state *nfa_state_union (struct nfa_state *a, struct nfa_state *b)
 {
-	struct nfa_state *s = nfa_split (a, b);
+	struct nfa_state *o = nfa_split (a, b);
 
-	nfa_merge (s, a);
-	nfa_merge (s, b);
-	return s;
+	nfa_merge (o, a);
+	nfa_merge (o, b);
+	return o;
 }
 
 struct nfa_state *nfa_state_opt (struct nfa_state *a)
 {
-	struct nfa_state *s = nfa_split (a, NULL);
+	struct nfa_state *o = nfa_split (a, NULL);
 
-	nfa_merge (s, a);
-	return s;
+	nfa_merge (o, a);
+	return o;
 }
 
 struct nfa_state *nfa_state_star (struct nfa_state *a)
 {
-	struct nfa_state *s = nfa_split (a, NULL);
+	struct nfa_state *o = nfa_split (a, NULL);
 
-	nfa_join  (a, s);
-	nfa_merge (s, a);
-	return s;
+	nfa_join  (a, o);
+	nfa_merge (o, a);
+	return o;
 }
 
 struct nfa_state *nfa_state_plus (struct nfa_state *a)
 {
-	struct nfa_state *s = nfa_split (a, NULL);
+	struct nfa_state *o = nfa_split (a, NULL);
 
-	nfa_join  (a, s);
-	nfa_merge (a, s);
+	nfa_join  (a, o);
+	nfa_merge (a, o);
 	return a;
 }
