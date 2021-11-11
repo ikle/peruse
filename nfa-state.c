@@ -92,11 +92,13 @@ no_state:
 	return NULL;
 }
 
-static void nfa_merge (struct nfa_state *a, struct nfa_state *b)
+static void nfa_merge (struct nfa_state *o, struct nfa_state *b)
 {
-	for (; a->next != NULL; a = a->next) {}
+	struct nfa_state *tail;
 
-	a->next = b;
+	for (tail = o; tail->next != NULL; tail = tail->next) {}
+
+	tail->next = b;
 }
 
 static void nfa_join (struct nfa_state *a, struct nfa_state *b)
