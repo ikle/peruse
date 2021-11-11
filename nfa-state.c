@@ -104,7 +104,7 @@ static void nfa_join (struct nfa_state *a, struct nfa_state *b)
 
 struct nfa_state *nfa_state_cat (struct nfa_state *a, struct nfa_state *b)
 {
-	nfa_join(a, b);
+	nfa_join  (a, b);
 	nfa_merge (a, b);
 	return a;
 }
@@ -130,7 +130,7 @@ struct nfa_state *nfa_state_star (struct nfa_state *a)
 {
 	struct nfa_state *s = nfa_split (a, NULL);
 
-	nfa_join (a, s);
+	nfa_join  (a, s);
 	nfa_merge (s, a);
 	return s;
 }
@@ -139,7 +139,7 @@ struct nfa_state *nfa_state_plus (struct nfa_state *a)
 {
 	struct nfa_state *s = nfa_split (a, NULL);
 
-	nfa_join (a, s);
+	nfa_join  (a, s);
 	nfa_merge (a, s);
 	return a;
 }
