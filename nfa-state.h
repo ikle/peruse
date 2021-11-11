@@ -23,8 +23,8 @@ struct nfa_state {
 	short color;	/* used by lexer to distinguish rules, 1 by default */
 };
 
-struct nfa_state *nfa_state_atom  (unsigned c);
-struct nfa_state *nfa_state_range (unsigned from, unsigned to);
+struct nfa_state *nfa_state_atom  (int c);
+struct nfa_state *nfa_state_range (int from, int to);
 
 struct nfa_state *nfa_state_cat   (struct nfa_state *a, struct nfa_state *b);
 struct nfa_state *nfa_state_union (struct nfa_state *a, struct nfa_state *b);

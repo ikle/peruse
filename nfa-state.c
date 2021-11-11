@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+#include <errno.h>
 #include <stdlib.h>
 
 #include "nfa-state.h"
@@ -66,13 +67,23 @@ void nfa_state_color (struct nfa_state *o, int color)
 
 /* NFA leaf node constructors */
 
-struct nfa_state *nfa_state_atom (unsigned c)
+struct nfa_state *nfa_state_atom (int c)
 {
+	if (c < 0) {
+		errno = EINVAL;
+		return NULL;
+	}
+
 	return nfa_state (c, c, NULL, NULL);
 }
 
-struct nfa_state *nfa_state_range (unsigned from, unsigned to)
+struct nfa_state *nfa_state_range (int from, int to)
 {
+	if (from < 0 || to < 0) {
+		errno = EINVAL;
+		return NULL;
+	}
+
 	return nfa_state (from, to, NULL, NULL);
 }
 
