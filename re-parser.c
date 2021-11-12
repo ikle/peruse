@@ -166,6 +166,7 @@ static struct nfa_state *re_exp (struct re_lexer *o)
 
 	while (re_lexer_peek (o) == '|') {
 		re_lexer_next (o);
+
 		if ((b = re_branch (o)) == NULL)
 			goto error;
 
