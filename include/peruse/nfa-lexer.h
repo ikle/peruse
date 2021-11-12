@@ -48,7 +48,7 @@ struct nfa_token {
 };
 
 /*
- * The function nfa_lexer returns next matched or NULL on error.
+ * The function nfa_lexer returns next matched token or NULL on error.
  */
 const struct nfa_token *nfa_lexer (struct nfa_lexer *o);
 
