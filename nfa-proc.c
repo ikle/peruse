@@ -124,6 +124,11 @@ int nfa_proc_step (struct nfa_proc *o, int c)
 		if (s->from <= c && c <= s->to) {
 			error = 0;
 
+			/*
+			 * Note that we remember the color of the first
+			 * matching node. Thus, rules added earlier have
+			 * a higher priority.
+			 */
 			if (add_state (o, o->nset, s->out[0]) && match == 0)
 				match = s->color;
 		}
