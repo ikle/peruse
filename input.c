@@ -1,7 +1,7 @@
 /*
  * Input Buffer
  *
- * Copyright (c) 2016-2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2016-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -43,7 +43,7 @@ void input_fini (struct input *o)
 	free (o->data);
 }
 
-int input_fill (struct input *o)
+size_t input_fill (struct input *o)
 {
 	size_t count;
 
