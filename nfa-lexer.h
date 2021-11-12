@@ -9,8 +9,9 @@
 #ifndef NFA_LEXER_H
 #define NFA_LEXER_H  1
 
+#include <peruse/nfa-state.h>
+
 #include "input.h"
-#include "nfa-state.h"
 
 /*
  * The NFA lexer constructor captures NFA, no one should try to use
