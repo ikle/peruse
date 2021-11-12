@@ -3,8 +3,8 @@
 Module          | Description
 ----------------|------------
 bitset          | Compact Binary Set
-input           | Input Buffer
-nfa-state       | Thompson NFA State helpers
-re-parser       | RE to NFA compiler
+nfa-state       | Thompson NFA state helpers
 nfa-proc        | Thompson NFA processor
+input           | Input Buffer
+re-parser       | RE to NFA compiler
 nfa-lexer       | NFA Lexer
