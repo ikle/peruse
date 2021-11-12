@@ -90,13 +90,16 @@ static int add_state (struct nfa_proc *o, long *set, const struct nfa_state *s)
 }
 
 /*
- * returns 1 on match (stop state reached), zero otherwise
+ * returns node color on match (stop state reached), zero otherwise
  */
 int nfa_proc_start (struct nfa_proc *o)
 {
 	bitset_clear (o->cset, o->count);
 
-	return add_state (o, o->cset, o->start);
+	if (add_state (o, o->cset, o->start))
+		return o->start->color;
+
+	return 0;
 }
 
 /*
