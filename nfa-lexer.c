@@ -8,6 +8,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 
 #include <peruse/nfa-lexer.h>
 #include <peruse/nfa-proc.h>
@@ -70,23 +71,34 @@ int nfa_lexer_eof (struct nfa_lexer *o)
 
 const struct nfa_token *nfa_lexer (struct nfa_lexer *o)
 {
+	mbstate_t mbs;
 	size_t i;
-	int c, color;
+	wchar_t c;
+	int n, color;
 
 	input_eat (&o->in, o->token.len);
 start:
+	memset (&mbs, 0, sizeof (mbs));
+
 	o->token.id = nfa_proc_start (o->proc);
 	o->token.len = 0;
 
 	for (i = 0; i < o->in.avail;) {
-		c = o->in.cursor[i++];
+		n = mbrtowc (&c, o->in.cursor + i, o->in.avail - i, &mbs);
+		if (n == -2)
+			break;		/* incomplete multibyte sequence */
+
+		if (n < 0)
+			return NULL;	/* invalid multibyte sequence */
+
+		i += n == 0 ? 1 : n;
 
 		if ((color = nfa_proc_step (o->proc, c)) < 0)
 			return o->token.id == 0 ? NULL : &o->token;
 
 		if (color > 0) {
 			o->token.id = color;
-			o->token.text = (void *) o->in.cursor;
+			o->token.text = o->in.cursor;
 			o->token.len = i;
 		}
 	}

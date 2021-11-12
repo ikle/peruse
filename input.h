@@ -14,7 +14,7 @@
 typedef size_t peruse_reader (void *to, size_t count, void *ctx);
 
 struct input {
-	unsigned char *data, *cursor;
+	char *data, *cursor;
 	size_t avail;
 	peruse_reader *read;
 	void *cookie;
