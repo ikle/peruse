@@ -32,7 +32,7 @@ struct nfa_state *nfa_state_plus  (struct nfa_state *a);
 void nfa_state_free (struct nfa_state *o);
 
 /*
- * Paint NFA root node to a specified color
+ * Color whole NFA with a specified color
  */
 void nfa_state_color (struct nfa_state *o, int color);
 
