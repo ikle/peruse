@@ -102,7 +102,7 @@ int nfa_proc_start (struct nfa_proc *o)
 /*
  * returns -1 on error (no match), node color on match, zero otherwise
  */
-int nfa_proc_step (struct nfa_proc *o, unsigned c)
+int nfa_proc_step (struct nfa_proc *o, int c)
 {
 	size_t i;
 	const struct nfa_state *s;
