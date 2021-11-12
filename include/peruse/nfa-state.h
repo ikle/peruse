@@ -36,4 +36,9 @@ void nfa_state_free (struct nfa_state *o);
  */
 void nfa_state_color (struct nfa_state *o, int color);
 
+/*
+ * Get total number of states in NFA
+ */
+size_t nfa_state_count (const struct nfa_state *o);
+
 #endif  /* PERUSE_NFA_STATE_H */

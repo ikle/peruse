@@ -25,6 +25,5 @@ struct nfa_state {
 
 /* set up indexes for NFA state list */
 void nfa_state_order (struct nfa_state *o);
-size_t nfa_state_count (const struct nfa_state *o);
 
 #endif  /* PERUSE_NFA_STATE_INT_H */
