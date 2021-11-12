@@ -1,7 +1,7 @@
 /*
- * NFA Lexer Sample
+ * Thompson NFA-based Lexer Sample
  *
- * Copyright (c) 2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
