@@ -6,8 +6,9 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+#include <peruse/re-parser.h>
+
 #include "re-lexer.h"
-#include "re-parser.h"
 
 /* RE recursive descent parser */
 

@@ -11,8 +11,7 @@
 #include <stdlib.h>
 
 #include <peruse/nfa-lexer.h>
-
-#include "re-parser.h"
+#include <peruse/re-parser.h>
 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(a)  (sizeof (a) / sizeof ((a)[0]))
