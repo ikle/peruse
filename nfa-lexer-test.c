@@ -32,6 +32,9 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
+	fprintf (stderr, "I: Total number of NFA states in set = %zu\n",
+		 nfa_state_count (set));
+
 	if ((lex = nfa_lexer_alloc (set, 0, NULL, stdin)) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot construct lexer\n");
 		return 1;
