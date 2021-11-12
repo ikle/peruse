@@ -9,9 +9,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <peruse/bitset.h>
 #include <peruse/nfa-proc.h>
 
-#include "bitset.h"
 #include "nfa-lexer.h"
 
 struct nfa_lexer {

@@ -9,9 +9,9 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#include <peruse/bitset.h>
 #include <peruse/nfa-proc.h>
 
-#include "bitset.h"
 #include "nfa-state.h"
 
 struct nfa_proc {

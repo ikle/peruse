@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef BITSET_H
-#define BITSET_H  1
+#ifndef PERUSE_BITSET_H
+#define PERUSE_BITSET_H  1
 
 #include <stddef.h>
 
@@ -22,4 +22,4 @@ int bitset_is_empty  (const long *o, size_t limit);
 
 size_t bitset_find (const long *o, size_t from, size_t limit);
 
-#endif  /* BITSET_H */
+#endif  /* PERUSE_BITSET_H */

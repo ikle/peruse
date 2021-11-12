@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "bitset.h"
+#include <peruse/bitset.h>
 
 static size_t bitset_get_size (size_t limit)
 {
