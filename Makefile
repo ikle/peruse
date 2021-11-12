@@ -1,5 +1,5 @@
-DESCRIPTION = Parser Library
-URL = https://github.com/ikle/parse
+DESCRIPTION = Parser Helper Library
+URL = https://github.com/ikle/peruse
 
 LIBNAME	= peruse
 LIBVER	= 0
