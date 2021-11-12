@@ -6,15 +6,15 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#include <peruse/re-parser.h>
+#include <peruse/nfa-parse.h>
 
-struct nfa_state *re_parse_list (const struct re_rule *rules)
+struct nfa_state *nfa_parse_rules (const struct nfa_rule *rules)
 {
 	struct nfa_state *nfa, *head = NULL;
-	const struct re_rule *p;
+	const struct nfa_rule *p;
 
 	for (p = rules; p != NULL; p = p->next) {
-		if ((nfa = re_parse (p->re, p->color)) == NULL)
+		if ((nfa = nfa_parse_re (p->re, p->color)) == NULL)
 			goto error;
 
 		head = head == NULL ? nfa : nfa_state_union (head, nfa);

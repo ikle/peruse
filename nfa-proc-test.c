@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #include <peruse/nfa-proc.h>
-#include <peruse/re-parser.h>
+#include <peruse/nfa-parse.h>
 
 static int nfa_proc_match (struct nfa_proc *o, const char *s)
 {
@@ -33,7 +33,7 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((nfa = re_parse (argv[1], 1)) == NULL) {
+	if ((nfa = nfa_parse_re (argv[1], 1)) == NULL) {
 		fprintf (stderr, "nfa-test: cannot compile RE\n");
 		return 1;
 	}

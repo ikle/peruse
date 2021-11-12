@@ -9,9 +9,9 @@
 #include <stdio.h>
 
 #include <peruse/nfa-lexer.h>
-#include <peruse/re-parser.h>
+#include <peruse/nfa-parse.h>
 
-static struct re_rule rules[] = {
+static struct nfa_rule rules[] = {
 	{ rules + 1,	"if",			10 },
 	{ rules + 2,	"then",			11 },
 	{ rules + 3,	"else",			12 },
@@ -27,7 +27,7 @@ int main (int argc, char *argv[])
 	struct nfa_lexer *lex;
 	const struct nfa_token *tok;
 
-	if ((set = re_parse_list (rules)) == NULL) {
+	if ((set = nfa_parse_rules (rules)) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot compile lexer\n");
 		return 1;
 	}

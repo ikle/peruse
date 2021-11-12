@@ -8,7 +8,7 @@
 
 #include <limits.h>
 
-#include <peruse/re-parser.h>
+#include <peruse/nfa-parse.h>
 
 #include "re-lexer.h"
 
@@ -179,7 +179,7 @@ error:
 	return NULL;
 }
 
-struct nfa_state *re_parse (const char *re, int color)
+struct nfa_state *nfa_parse_re (const char *re, int color)
 {
 	struct re_lexer o;
 	struct nfa_state *start;
