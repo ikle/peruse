@@ -7,7 +7,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #include <peruse/nfa-lexer.h>
 #include <peruse/re-parser.h>
