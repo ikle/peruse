@@ -9,7 +9,7 @@
 #ifndef RE_PARSER_H
 #define RE_PARSER_H  1
 
-#include "nfa-state.h"
+#include <peruse/nfa-state.h>
 
 struct nfa_state *re_parse (const char *re, int color);
 
