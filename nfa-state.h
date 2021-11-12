@@ -18,9 +18,9 @@ enum nfa_type {
 struct nfa_state {
 	struct nfa_state *next;
 	struct nfa_state *out[2];
+	size_t index;	/* used by processor to map state to state index */
 
 	short from, to;
-	int index;	/* used by processor to map state to state index */
 	short color;	/* used by lexer to distinguish rules, 1 by default */
 };
 
