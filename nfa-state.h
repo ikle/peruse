@@ -12,7 +12,7 @@
 #include <peruse/nfa-state.h>
 
 enum nfa_type {
-	NFA_SPLIT = -1,
+	NFA_SPLIT = -1,  /* used to mark virtual split nodes */
 };
 
 struct nfa_state {
@@ -24,7 +24,9 @@ struct nfa_state {
 	int color;	/* used by lexer to distinguish rules, 1 by default */
 };
 
-/* set up indexes for NFA state list */
+/*
+ * Set up indexes for NFA state list
+ */
 void nfa_state_order (struct nfa_state *o);
 
 #endif  /* PERUSE_NFA_STATE_INT_H */
