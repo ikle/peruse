@@ -1,13 +1,13 @@
 /*
  * RE simple lexer
  *
- * Copyright (c) 2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef RE_LEXER_H
-#define RE_LEXER_H  1
+#ifndef PERUSE_RE_LEXER_H
+#define PERUSE_RE_LEXER_H  1
 
 struct re_lexer {
 	const char *p;
@@ -43,4 +43,4 @@ static int re_lexer_eat (struct re_lexer *o, int c)
 	return 1;
 }
 
-#endif  /* RE_LEXER_H */
+#endif  /* PERUSE_RE_LEXER_H */
