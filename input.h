@@ -11,16 +11,16 @@
 
 #include <stddef.h>
 
-typedef size_t input_reader (void *to, size_t count, void *ctx);
+typedef size_t peruse_reader (void *to, size_t count, void *ctx);
 
 struct input {
 	unsigned char *data, *cursor;
 	size_t size, avail;
-	input_reader *read;
+	peruse_reader *read;
 	void *ctx;
 };
 
-int  input_init (struct input *o, size_t size, input_reader *read, void *ctx);
+int  input_init (struct input *o, size_t size, peruse_reader *read, void *ctx);
 void input_fini (struct input *o);
 
 size_t input_fill (struct input *o);

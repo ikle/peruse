@@ -19,7 +19,7 @@ static size_t stdio_read (void *to, size_t count, void *ctx)
 	return fread (to, 1, count, in);
 }
 
-int input_init (struct input *o, size_t size, input_reader *read, void *ctx)
+int input_init (struct input *o, size_t size, peruse_reader *read, void *ctx)
 {
 	o->size = size == 0 ? BUFSIZ : size;
 
