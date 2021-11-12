@@ -40,9 +40,9 @@ struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start,
 	if ((o->proc = nfa_proc_alloc (start)) == NULL)
 		goto no_proc;
 
+	o->token.color = 0;
 	o->token.text = NULL;
 	o->token.len = 0;
-	o->token.id = 0;
 	o->eof = 0;
 
 	return o;
@@ -75,17 +75,17 @@ const struct nfa_token *nfa_lexer (struct nfa_lexer *o)
 
 	input_eat (&o->in, o->token.len);
 start:
-	o->token.id = nfa_proc_start (o->proc);
+	o->token.color = nfa_proc_start (o->proc);
 	o->token.len = 0;
 
 	for (i = 0; i < o->in.avail;) {
 		c = o->in.cursor[i++];
 
 		if ((color = nfa_proc_step (o->proc, c)) < 0)
-			return o->token.id == 0 ? NULL : &o->token;
+			return o->token.color == 0 ? NULL : &o->token;
 
 		if (color > 0) {
-			o->token.id = color;
+			o->token.color = color;
 			o->token.text = (void *) o->in.cursor;
 			o->token.len = i;
 		}
@@ -98,5 +98,5 @@ start:
 		goto start;
 	}
 
-	return o->token.id == 0 ? NULL : &o->token;
+	return o->token.color == 0 ? NULL : &o->token;
 }

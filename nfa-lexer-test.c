@@ -16,7 +16,7 @@
 #endif
 
 struct rule {
-	int token;
+	int color;
 	const char *re;
 };
 
@@ -36,7 +36,7 @@ static struct nfa_state *compile_nfa (void)
 	struct nfa_state *nfa, *head = NULL;
 
 	for (i = 0; i < ARRAY_SIZE (rules); ++i) {
-		if ((nfa = re_parse (rules[i].re, rules[i].token)) == NULL)
+		if ((nfa = re_parse (rules[i].re, rules[i].color)) == NULL)
 			goto error;
 
 		head = head == NULL ? nfa : nfa_state_union (head, nfa);
@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
 	}
 
 	while ((tok = nfa_lexer (lex)) != NULL)
-		printf ("%d: '%.*s'\n", tok->id, (int) tok->len, tok->text);
+		printf ("%d: '%.*s'\n", tok->color, (int) tok->len, tok->text);
 
 	if (!nfa_lexer_eof (lex)) {
 		fprintf (stderr, "E: lexical error\n");

@@ -42,9 +42,9 @@ int nfa_lexer_eof (struct nfa_lexer *o);
  * NFA Lexer Token
  */
 struct nfa_token {
+	int color;	/* token identifier */
 	char *text;
 	size_t len;
-	int id;
 };
 
 /*
