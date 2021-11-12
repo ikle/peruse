@@ -20,8 +20,8 @@ struct nfa_state {
 	struct nfa_state *out[2];
 	size_t index;	/* used by processor to map state to state index */
 
-	short from, to;
-	short color;	/* used by lexer to distinguish rules, 1 by default */
+	int from, to;
+	int color;	/* used by lexer to distinguish rules, 1 by default */
 };
 
 /* set up indexes for NFA state list */
