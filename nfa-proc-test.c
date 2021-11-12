@@ -1,7 +1,7 @@
 /*
  * RE to NFA compiler and NFA processor Sample
  *
- * Copyright (c) 20xy-2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -25,9 +25,9 @@ static int nfa_proc_match (struct nfa_proc *o, const char *s)
 
 int main (int argc, char *argv[])
 {
-	int i;
 	struct nfa_state *nfa;
 	struct nfa_proc *proc;
+	int i;
 
 	if (argc < 3) {
 		fprintf (stderr, "usage:\n\tnfa-test RE string...\n");
