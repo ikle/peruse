@@ -57,7 +57,7 @@ int main (int argc, char *argv[])
 	struct nfa_lexer *lex;
 	const struct nfa_token *tok;
 
-	if (!input_init (&in, 0, NULL, stdin)) {
+	if (!input_init (&in, NULL, stdin)) {
 		perror ("nfa-lexer-test");
 		return 1;
 	}

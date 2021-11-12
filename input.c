@@ -12,6 +12,12 @@
 
 #include "input.h"
 
+#ifdef PERUSE_BUFSIZE
+#define SIZE  PERUSE_BUFSIZE
+#else
+#define SIZE  BUFSIZ
+#endif
+
 static size_t stdio_read (void *to, size_t count, void *cookie)
 {
 	FILE *in = cookie;
@@ -19,11 +25,9 @@ static size_t stdio_read (void *to, size_t count, void *cookie)
 	return fread (to, 1, count, in);
 }
 
-int input_init (struct input *o, size_t size, peruse_reader *read, void *cookie)
+int input_init (struct input *o, peruse_reader *read, void *cookie)
 {
-	o->size = size == 0 ? BUFSIZ : size;
-
-	if ((o->data = malloc (o->size)) == NULL)
+	if ((o->data = malloc (SIZE)) == NULL)
 		return 0;
 
 	o->cursor = o->data;
@@ -51,7 +55,7 @@ size_t input_fill (struct input *o)
 	memmove (o->data, o->cursor, o->avail);
 	o->cursor = o->data;
 
-	count = o->read (o->cursor + o->avail, o->size - o->avail, o->cookie);
+	count = o->read (o->cursor + o->avail, SIZE - o->avail, o->cookie);
 	o->avail += count;
 
 	return count;

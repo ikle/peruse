@@ -15,12 +15,12 @@ typedef size_t peruse_reader (void *to, size_t count, void *ctx);
 
 struct input {
 	unsigned char *data, *cursor;
-	size_t size, avail;
+	size_t avail;
 	peruse_reader *read;
 	void *cookie;
 };
 
-int input_init (struct input *o, size_t size, peruse_reader *read, void *cookie);
+int  input_init (struct input *o, peruse_reader *read, void *cookie);
 void input_fini (struct input *o);
 
 size_t input_fill (struct input *o);
