@@ -16,7 +16,7 @@ static struct re_rule rules[] = {
 	{ rules + 2,	"then",			11 },
 	{ rules + 3,	"else",			12 },
 
-	{ rules + 4,	"[ \t\\n]+",		40 },
+	{ rules + 4,	"[ \t\n]+",		40 },
 	{ rules + 5,	"0|(1[01]*)",		41 },
 	{ NULL,		"[ab](-?[a-z0-9])*",	42 },
 };
