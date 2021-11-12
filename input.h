@@ -17,10 +17,10 @@ struct input {
 	unsigned char *data, *cursor;
 	size_t size, avail;
 	peruse_reader *read;
-	void *ctx;
+	void *cookie;
 };
 
-int  input_init (struct input *o, size_t size, peruse_reader *read, void *ctx);
+int input_init (struct input *o, size_t size, peruse_reader *read, void *cookie);
 void input_fini (struct input *o);
 
 size_t input_fill (struct input *o);

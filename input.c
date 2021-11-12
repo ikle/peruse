@@ -12,14 +12,14 @@
 
 #include "input.h"
 
-static size_t stdio_read (void *to, size_t count, void *ctx)
+static size_t stdio_read (void *to, size_t count, void *cookie)
 {
-	FILE *in = ctx;
+	FILE *in = cookie;
 
 	return fread (to, 1, count, in);
 }
 
-int input_init (struct input *o, size_t size, peruse_reader *read, void *ctx)
+int input_init (struct input *o, size_t size, peruse_reader *read, void *cookie)
 {
 	o->size = size == 0 ? BUFSIZ : size;
 
@@ -27,10 +27,10 @@ int input_init (struct input *o, size_t size, peruse_reader *read, void *ctx)
 		return 0;
 
 	o->cursor = o->data;
-	o->avail = 0;
+	o->avail  = 0;
 
-	o->read = read == NULL ? stdio_read : read;
-	o->ctx  = ctx;
+	o->read   = read == NULL ? stdio_read : read;
+	o->cookie = cookie;
 
 	return 1;
 }
@@ -51,7 +51,7 @@ size_t input_fill (struct input *o)
 	memmove (o->data, o->cursor, o->avail);
 	o->cursor = o->data;
 
-	count = o->read (o->cursor + o->avail, o->size - o->avail, o->ctx);
+	count = o->read (o->cursor + o->avail, o->size - o->avail, o->cookie);
 	o->avail += count;
 
 	return count;
