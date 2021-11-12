@@ -1,7 +1,7 @@
 /*
- * NFA Lexer
+ * Thompson NFA-based Lexer
  *
- * Copyright (c) 2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -10,10 +10,10 @@
 #include <string.h>
 
 #include <peruse/bitset.h>
+#include <peruse/nfa-lexer.h>
 #include <peruse/nfa-proc.h>
 
 #include "input.h"
-#include "nfa-lexer.h"
 
 struct nfa_lexer {
 	struct nfa_proc *proc;

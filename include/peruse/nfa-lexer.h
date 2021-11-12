@@ -1,13 +1,13 @@
 /*
- * NFA Lexer
+ * Thompson NFA-based Lexer
  *
- * Copyright (c) 2020 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef NFA_LEXER_H
-#define NFA_LEXER_H  1
+#ifndef PERUSE_NFA_LEXER_H
+#define PERUSE_NFA_LEXER_H  1
 
 #include <peruse/nfa-state.h>
 
@@ -52,4 +52,4 @@ struct nfa_token {
  */
 const struct nfa_token *nfa_lexer (struct nfa_lexer *o);
 
-#endif  /* NFA_LEXER_H */
+#endif  /* PERUSE_NFA_LEXER_H */

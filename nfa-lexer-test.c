@@ -10,7 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "nfa-lexer.h"
+#include <peruse/nfa-lexer.h>
+
 #include "re-parser.h"
 
 #ifndef ARRAY_SIZE
