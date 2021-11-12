@@ -1,5 +1,5 @@
 /*
- * Regular Expression to NFA compiler
+ * Regular Expression to Thompson NFA compiler
  *
  * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
  *
