@@ -52,22 +52,16 @@ error:
 
 int main (int argc, char *argv[])
 {
-	struct input in;
 	struct nfa_state *set;
 	struct nfa_lexer *lex;
 	const struct nfa_token *tok;
-
-	if (!input_init (&in, NULL, stdin)) {
-		perror ("nfa-lexer-test");
-		return 1;
-	}
 
 	if ((set = compile_nfa ()) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot compile lexer\n");
 		return 1;
 	}
 
-	if ((lex = nfa_lexer_alloc (set, &in)) == NULL) {
+	if ((lex = nfa_lexer_alloc (set, NULL, stdin)) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot construct lexer\n");
 		return 1;
 	}
@@ -81,6 +75,5 @@ int main (int argc, char *argv[])
 	}
 
 	nfa_lexer_free (lex);
-	input_fini (&in);
 	return 0;
 }

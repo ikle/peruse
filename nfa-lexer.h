@@ -11,14 +11,22 @@
 
 #include <peruse/nfa-state.h>
 
-#include "input.h"
+/*
+ * The peruse_reader function reads upto count bytes into buffer.
+ * Returns count of bytes stored into buffer or zero on EOF.
+ */
+typedef size_t peruse_reader (void *to, size_t count, void *cookie);
 
 /*
- * The NFA lexer constructor captures NFA, no one should try to use
+ * The function nfa_lexer_alloc creates NFA Lexer context with the specified
+ * start state. If the reader is NULL then the standard I/O reader is used
+ * and cookie should points to FILE object.
+ *
+ * NOTE: The NFA lexer constructor captures NFA, no one should try to use
  * the NFA passed to the constructor.
  */
 struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start,
-				   struct input *in);
+				   peruse_reader *read, void *cookie);
 void nfa_lexer_free (struct nfa_lexer *o);
 
 int nfa_lexer_eof (struct nfa_lexer *o);
