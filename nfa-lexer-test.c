@@ -11,42 +11,15 @@
 #include <peruse/nfa-lexer.h>
 #include <peruse/re-parser.h>
 
-#ifndef ARRAY_SIZE
-#define ARRAY_SIZE(a)  (sizeof (a) / sizeof ((a)[0]))
-#endif
+static struct re_rule rules[] = {
+	{ rules + 1,	"if",			10 },
+	{ rules + 2,	"then",			11 },
+	{ rules + 3,	"else",			12 },
 
-struct rule {
-	int color;
-	const char *re;
+	{ rules + 4,	"[ \t\\n]+",		40 },
+	{ rules + 5,	"0|(1[01]*)",		41 },
+	{ NULL,		"[ab](-?[a-z0-9])*",	42 },
 };
-
-static const struct rule rules[] = {
-	{ 10,	"if" },
-	{ 11,	"then" },
-	{ 12,	"else" },
-
-	{ 40,	"[ \t\\n]+" },
-	{ 41,	"0|(1[01]*)" },
-	{ 42,	"[ab](-?[a-z0-9])*" },
-};
-
-static struct nfa_state *compile_nfa (void)
-{
-	size_t i;
-	struct nfa_state *nfa, *head = NULL;
-
-	for (i = 0; i < ARRAY_SIZE (rules); ++i) {
-		if ((nfa = re_parse (rules[i].re, rules[i].color)) == NULL)
-			goto error;
-
-		head = head == NULL ? nfa : nfa_state_union (head, nfa);
-	}
-
-	return head;
-error:
-	nfa_state_free (head);
-	return NULL;
-}
 
 int main (int argc, char *argv[])
 {
@@ -54,7 +27,7 @@ int main (int argc, char *argv[])
 	struct nfa_lexer *lex;
 	const struct nfa_token *tok;
 
-	if ((set = compile_nfa ()) == NULL) {
+	if ((set = re_parse_list (rules)) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot compile lexer\n");
 		return 1;
 	}
