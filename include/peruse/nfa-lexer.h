@@ -25,7 +25,7 @@ typedef size_t peruse_reader (void *to, size_t count, void *cookie);
  * NOTE: The NFA lexer constructor captures NFA, no one should try to use
  * the NFA passed to the constructor.
  */
-struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start,
+struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start, size_t size,
 				   peruse_reader *read, void *cookie);
 /*
  * The function nfa_lexer_free destroys NFA Lexer context.

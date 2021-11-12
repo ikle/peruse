@@ -26,7 +26,7 @@ struct nfa_lexer {
  * The NFA lexer constructor captures NFA, no one should try to use
  * the NFA passed to the constructor.
  */
-struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start,
+struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start, size_t size,
 				   peruse_reader *read, void *cookie)
 {
 	struct nfa_lexer *o;
@@ -34,7 +34,7 @@ struct nfa_lexer *nfa_lexer_alloc (struct nfa_state *start,
 	if ((o = malloc (sizeof (*o))) == NULL)
 		return NULL;
 
-	if (!input_init (&o->in, read, cookie))
+	if (!input_init (&o->in, size, read, cookie))
 		goto no_input;
 
 	if ((o->proc = nfa_proc_alloc (start)) == NULL)

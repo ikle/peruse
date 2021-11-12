@@ -32,7 +32,7 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((lex = nfa_lexer_alloc (set, NULL, stdin)) == NULL) {
+	if ((lex = nfa_lexer_alloc (set, 0, NULL, stdin)) == NULL) {
 		fprintf (stderr, "nfa-lexer-test: cannot construct lexer\n");
 		return 1;
 	}
