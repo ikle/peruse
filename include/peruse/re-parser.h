@@ -13,4 +13,12 @@
 
 struct nfa_state *re_parse (const char *re, int color);
 
+struct re_rule {
+	struct re_rule *next;
+	char *re;
+	int color;
+};
+
+struct nfa_state *re_parse_list (const struct re_rule *rules);
+
 #endif  /* PERUSE_RE_PARSER_H */
