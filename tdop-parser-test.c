@@ -224,7 +224,7 @@ static const char *get_name (int token)
 	return NULL;
 }
 
-static void show (struct se_node *o, size_t indent)
+static void se_node_show (struct se_node *o, size_t indent)
 {
 	size_t i;
 
@@ -237,7 +237,7 @@ static void show (struct se_node *o, size_t indent)
 		printf ("%s\n", get_name (o->type));
 
 		for (i = 0; i < o->rank; ++i)
-			show (o->arg[i], indent + 1);
+			se_node_show (o->arg[i], indent + 1);
 	}
 }
 
@@ -250,7 +250,7 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	show (o, 0);
+	se_node_show (o, 0);
 	se_node_free (o);
 	return 0;
 }
