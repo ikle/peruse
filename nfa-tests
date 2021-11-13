@@ -1,0 +1,5 @@
+#!/bin/sh
+
+E='if 0 1101 elsethen  0011ab-1b baz-flow-er17'
+
+echo "$E" | ./nfa-lexer-test
