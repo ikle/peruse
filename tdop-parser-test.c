@@ -82,6 +82,7 @@ static int is_right (int type)
 	case ';':
 	case '=':
 	case ',':
+	case '?':
 	case '^':  return 1;
 	}
 
