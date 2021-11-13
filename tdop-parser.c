@@ -232,7 +232,7 @@ static void show (struct se_node *o, size_t indent)
 	else {
 		printf ("%s\n", get_name (o->type));
 
-		for (i = 0; i < o->size; ++i)
+		for (i = 0; i < o->rank; ++i)
 			show (o->arg[i], indent + 1);
 	}
 }

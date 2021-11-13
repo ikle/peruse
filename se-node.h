@@ -12,8 +12,8 @@
 #include <stddef.h>
 
 struct se_node {
-	short type;
-	unsigned short size;
+	int type;
+	int rank;  /* number of childs */
 	struct se_node *arg[];
 };
 
@@ -21,7 +21,7 @@ struct se_node {
  * NOTE: Ownership of arguments transferred, and in case of errors all
  * arguments will be freed.
  */
-struct se_node *se_node_alloc (short type, unsigned short size, ...);
+struct se_node *se_node_alloc (int type, int rank, ...);
 void se_node_free (struct se_node *o);
 
 #endif  /* PERUSE_SE_NODE_H */

@@ -15,27 +15,27 @@
  * NOTE: Ownership of arguments transferred, and in case of errors all
  * arguments will be freed.
  */
-struct se_node *se_node_alloc (short type, unsigned short size, ...)
+struct se_node *se_node_alloc (int type, int rank, ...)
 {
 	struct se_node *o;
 	va_list ap;
 	size_t i;
 
-	va_start (ap, size);
+	va_start (ap, rank);
 
-	if ((o = malloc (sizeof (*o) + sizeof (o->arg[0]) * size)) == NULL)
+	if ((o = malloc (sizeof (*o) + sizeof (o->arg[0]) * rank)) == NULL)
 		goto error;
 
 	o->type = type;
-	o->size = size;
+	o->rank = rank;
 
-	for (i = 0; i < o->size; ++i)
+	for (i = 0; i < rank; ++i)
 		o->arg[i] = va_arg (ap, struct se_node *);
 
 	va_end (ap);
 	return o;
 error:
-	for (i = 0; i < o->size; ++i)
+	for (i = 0; i < rank; ++i)
 		se_node_free (va_arg (ap, struct se_node *));
 
 	va_end (ap);
@@ -49,7 +49,7 @@ void se_node_free (struct se_node *o)
 	if (o == NULL)
 		return;
 
-	for (i = 0; i < o->size; ++i)
+	for (i = 0; i < o->rank; ++i)
 		se_node_free (o->arg[i]);
 
 	free (o);
