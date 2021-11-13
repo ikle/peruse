@@ -31,16 +31,17 @@ static void next (FILE *in)
 static int get_prio (int type)
 {
 	switch (type) {
-	case '=':  return 1;
-	case ',':  return 2;
-	case '?':  return 3;
+	case ';':  return 10;
+	case '=':  return 20;
+	case ',':  return 30;
+	case '?':  return 40;
 	case '+':
-	case '-':  return 4;
-	case '*':  return 5;
+	case '-':  return 50;
+	case '*':  return 60;
 	case '+' + 0x80:
-	case '-' + 0x80: return 6;
-	case '^':  return 7;
-	case '!':  return 8;
+	case '-' + 0x80: return 70;
+	case '^':  return 80;
+	case '!':  return 90;
 	}
 
 	return 0;
@@ -78,6 +79,7 @@ static int is_postfix (int type)
 static int is_right (int type)
 {
 	switch (type) {
+	case ';':
 	case '=':
 	case ',':
 	case '^':  return 1;
@@ -204,6 +206,7 @@ struct se_node *parse (FILE *in)
 static const char *get_name (int token)
 {
 	switch (token) {
+	case ';':  return "seq";
 	case ',':  return "pair";
 	case '?':  return "if-then-else";
 	case '!':  return "fact";

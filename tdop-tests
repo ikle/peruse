@@ -1,8 +1,8 @@
 #!/bin/sh
 
 E='
-	x = a + -b*c^n - r!^m ++a,
-	y = c? b,
+	x = a + -b*c^n - r!^m ++a;
+	y = c? b;
 	z = y ? a^k : x + y
 '
 
