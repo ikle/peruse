@@ -69,7 +69,7 @@ size_t name_table_add (struct name_table *o, const char *name, size_t len)
 
 	if (o->last == o->avail) {
 		curr = o->avail * sizeof (o->name[0]);
-		
+
 		if ((next = curr * 2) < curr) {
 			errno = ENOMEM;
 			return 0;
