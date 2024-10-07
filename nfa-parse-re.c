@@ -1,7 +1,7 @@
 /*
  * Regular Expression to Thompson NFA compiler
  *
- * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2024 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -90,7 +90,7 @@ static struct nfa_state *re_atom (struct re_lexer *o)
 		if (!re_lexer_eat (o, ']'))
 			goto error;
 
-		return a;;
+		return a;
 	}
 	else if (c == '\\') {
 		re_lexer_next (o);
