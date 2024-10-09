@@ -1,0 +1,14 @@
+#!/bin/sh
+
+E='
+	x = a + -b*c^n - r!^m ++a;
+	t = o ? a + b : c;
+	y = c? b : w;
+	z = y ? -a^k : x + y;
+	w = a? (b? c : d) : e;
+	w = a? b? c : d : e
+'
+
+echo "expr = $E"
+
+echo "$E" | ./tdop-2-test
