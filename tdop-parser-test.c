@@ -209,14 +209,14 @@ static const char *get_name (int token)
 	switch (token) {
 	case ';':  return "seq";
 	case ',':  return "pair";
-	case '?':  return "if-then-else";
+	case '?':  return "cond";
 	case '!':  return "fact";
 	case '=':  return "set";
 	case '+':  return "sum";
 	case '-':  return "diff";
 	case '*':  return "prod";
 	case '^':  return "pow";
-	case '(':
+	case '(':  return "group";
 	case '+' + 0x80: return "id";
 	case '-' + 0x80: return "neg";
 	}
