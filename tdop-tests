@@ -2,6 +2,7 @@
 
 E='
 	x = a + -b*c^n - r!^m ++a;
+	t = o ? a + b : c;
 	y = c? b;
 	z = y ? -a^k : x + y;
 	w = a? (b? c : d) : e;
