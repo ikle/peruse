@@ -22,6 +22,9 @@ typedef size_t peruse_reader (void *to, size_t count, void *cookie);
  * start state. If the reader is NULL then the standard I/O reader is used
  * and cookie should points to FILE object.
  *
+ * If no maximum window size is specified, then the buffer size for
+ * standard I/O is used.
+ *
  * NOTE: The NFA lexer constructor captures NFA, no one should try to use
  * the NFA passed to the constructor.
  */
