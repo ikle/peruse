@@ -1,7 +1,7 @@
 /*
  * Thompson NFA-based Lexer
  *
- * Copyright (c) 2020-2021 Alexei A. Smekalkine <ikle@ikle.ru>
+ * Copyright (c) 2020-2024 Alexei A. Smekalkine <ikle@ikle.ru>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
@@ -72,6 +72,11 @@ int nfa_lexer_eof (struct nfa_lexer *o)
 	return o->eof && avail == 0;
 }
 
+const struct nfa_token *nfa_lexer_get (struct nfa_lexer *o)
+{
+	return o->token.color == 0 ? NULL : &o->token;
+}
+
 const struct nfa_token *nfa_lexer (struct nfa_lexer *o)
 {
 	size_t i, avail;
@@ -106,5 +111,5 @@ start:
 		goto start;
 	}
 
-	return o->token.color == 0 ? NULL : &o->token;
+	return nfa_lexer_get (o);
 }
